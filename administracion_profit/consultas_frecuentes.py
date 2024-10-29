@@ -36,10 +36,10 @@ from edo_cta_registrar_mov import registrar_mov_ban_edo_cta
 # -->ESTADO DE CUENTA
 # registrar_mov_ban_edo_cta()  # Registrar los movimientos bancarios seleccionados del estado de cuenta actual banesco
 # get_edo_cta_bs_y_usd()  # Estado de cuenta banesco en $$$$$$$
-print(get_mov_igtf_comisiones().to_string())  # Muestra los resultados de las comisiones e IGTF a registrar manualmente
+#print(get_mov_igtf_comisiones().to_string())  # Muestra los resultados de las comisiones e IGTF a registrar manualmente
 
 # -->BANCO
-# print(buscar_en_mov_de_banco(texto_a_buscar="bono", anio='all', mes='all').to_string())  # Muestra los resultados de la busqueda en los movimientos bancarios
+print(buscar_en_mov_de_banco(texto_a_buscar="bono", anio='all', mes='all').to_string())  # Muestra los resultados de la busqueda en los movimientos bancarios
 
 # -->PROVEEDORES
 # print(buscar_en_proveedores('V133396426').reset_index(drop=True).to_string())  # Muestra los resultados de la busqueda en la tabla de PROVEEDORES
