@@ -1,0 +1,5 @@
+print(' Primer mensaje')
+print('\n' * 2, 'Imprime renglones vacios entre mensajes')
+print('\n' * 2, 'Segundo mensaje')
+print('\n' * 2, 'Imprime dos renglones entre mensajes')
+print('\n' * 2, 'Tercer mensaje')
