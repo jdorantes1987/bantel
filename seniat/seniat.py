@@ -13,7 +13,7 @@ def leer_imagen(url):
     return imagen
 
 
-# leer_imagen('http://contribuyente.seniat.gob.ve/BuscaRif/Captcha.jpg').show()
+leer_imagen('http://contribuyente.seniat.gob.ve/BuscaRif/Captcha.jpg').show()
 
 
 def facturas_ret_islr_efect():
@@ -21,7 +21,7 @@ def facturas_ret_islr_efect():
     fact = facturacion_docs_sin_saldo()
     fact['nro_doc'] = fact['nro_doc'].astype('Int64')
     # Lee un archivo .xlsx
-    fact_ret_islr = read_excel("Retenciones Efectivas Seniat.xlsx")
+    fact_ret_islr = read_excel("seniat/Retenciones Efectivas Seniat.xlsx")
     # Extrae los primeros 80 caracteres de la izquierda
     fact_ret_islr['Descripción'] = fact_ret_islr['Descripción'].str[:30]
     join1 = merge(fact, fact_ret_islr, how='left', left_on='nro_doc', right_on='Nro. Factura')
@@ -31,6 +31,6 @@ def facturas_ret_islr_efect():
     return join1
 
 
-facturas_ret_islr_efect().to_string()
+print(facturas_ret_islr_efect().info())
 
 
