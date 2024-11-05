@@ -56,7 +56,7 @@ def establecer_color_amarillo_mov_edo_cta_por_registrar_banesco():
     df_edo_cta = df[df['Fecha'].notnull()].copy()  # FILTRAR VALORES NO NULOS
     df_edo_cta['Comentarios'] = df_edo_cta['Comentarios'].str[:50]
     wb_edo_cta = load_workbook(p_edo_cta_banesco)
-    mov_x_registrar = get_mov_edo_cta_pdtes_por_regist('2024-07-01')
+    mov_x_registrar = get_mov_edo_cta_pdtes_por_regist('2024-10-01')
     # Obtiene los movimientos por conciliar
     mov_pdtes = df_edo_cta[df_edo_cta['Referencia'].isin(mov_x_registrar)]
     # Obtiene los movimientos conciliados

@@ -6,7 +6,7 @@ p_data_estadisticas_bcv_datapy = '//10.100.104.1/AdministracionFinanzas/DESARROL
 p_data_estadisticas_par = '../bantel/accesos/excel/tasas_Par.xlsx'  # ruta relativa, regresa a la carpeta anterior
 p_data_comprobantes_manuales = 'C:/Users/jdorantes/Documents/Analisis/Desarrollos/DATA_COMPROBANTES_X_CONTABILIZAR.xlsx'
 p_data_revision_contabilidad = 'C:/Users/jdorantes/Documents/Analisis/Revision Contabilidad.xlsm'
-p_data_edo_cta_banesco = 'C:/Users/jdorantes/Documents/Analisis/Estados de Cuenta/Banesco/2024/06. JUN/Banesco Junio 2024.xlsx'
+p_data_edo_cta_banesco = 'C:/Users/jdorantes/Documents/Analisis/Estados de Cuenta/Banesco/2024/10. OCT/Banesco Octubre 2024.xlsx'
 p_data_insert_fact_y_recibos = ('X:/DESARROLLO_DataProfit/Planes Facturacion Clientes Izquierda.xlsx', '//10.100.104.1/AdministracionFinanzas/DESARROLLO_DataProfit/Planes Facturacion Clientes Derecha.xlsx')
 
 def datos_estadisticas_tasas():
