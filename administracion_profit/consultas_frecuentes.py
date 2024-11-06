@@ -50,7 +50,7 @@ from edo_cta_registrar_mov import establecer_color_amarillo_mov_edo_cta_por_regi
 
 # -->PROVEEDORES
 # print(buscar_en_proveedores('V133396426').reset_index(drop=True).to_string())  # Muestra los resultados de la busqueda en la tabla de PROVEEDORES
-# print(buscar_en_compras(str_search='HIACE', anio='all').to_string())  # Muestra los resultados de la busqueda en las COMPRAS
+# print(buscar_en_compras(str_search='red falcon', anio='all').to_string())  # Muestra los resultados de la busqueda en las COMPRAS
 # print(top_proveedores().to_string())  # TOP Facturación por proveedores
 
 # -->CLIENTES
@@ -61,7 +61,7 @@ patron3 = r"^414\d{7}$" # Expresión regular para números de teléfono que comi
 # print(buscar_en_ventas(str_search="CL251", anio='all', mes='all').reset_index(drop=True).to_string())  # Muestra los resultados de la busqueda en las VENTAS
 # print(top_clientes(anio=2024, top=5).to_string())  # TOP Facturación por cliente
 # print(variacion_tasa_en_cobros(anio=2024).to_string())  # Listado de facturacion del mes con la variación en la tasa en USD "Ojo solo hace la comparación de la base imponible de la factura"
-# print(variacion_tasa_en_cobros_por_mes(anio=2023))  # Resumen de facturacion del mes con la variación en la tasa en USD
+# print(variacion_tasa_en_cobros_por_mes(anio=2024))  # Resumen de facturacion del mes con la variación en la tasa en USD
 # print(facturas_con_saldo_det(anio='all', dato_cliente='all').to_string())  # FACTURAS CON SALDO detallado
 # print(facturas_con_saldo_res(anio='all', usd=True).to_string()) # FACTURAS CON SALDO resumido
 # facturas_con_saldo_res(anio='all', dato_cliente='all', usd=False).to_excel('clientes_con_saldo.xlsx')

@@ -279,6 +279,20 @@ class datos_profit:
         df = get_read_sql(sql, **self.dict_con_admin)
         return DataFrame(df)
 
+    def rep_cobros_x_cliente(self):
+        sql = """
+                Select 
+                    RTRIM(ctpr.cob_num) as cob_num, RTRIM(cb.co_cli) as co_cli, c.cli_des, 
+                    cb.fecha as fecha_cob, mont_doc, RTRIM(ctpr.forma_pag) as forma_pag, 
+                    RTRIM(ctpr.co_ban) as co_ban, RTRIM(ctpr.cod_caja) as cod_caja, ctpr.fecha_che 
+                From 
+                    saCobroTPReng as ctpr LEFT JOIN saCobro as cb ON ctpr.cob_num = cb.cob_num 
+                    LEFT JOIN saCliente as c ON cb.co_cli = RTRIM(c.co_cli) 
+                Where c.inactivo = 'FALSE'
+            """
+        df = get_read_sql(sql, **self.dict_con_admin)
+        return DataFrame(df)
+
     def articulos_profit_con_su_cuenta_contable(self):
         df = self.articulos_profit()
         art_profit = DataFrame(df)
