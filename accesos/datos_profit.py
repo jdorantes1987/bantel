@@ -279,6 +279,20 @@ class datos_profit:
         df = get_read_sql(sql, **self.dict_con_admin)
         return DataFrame(df)
 
+    def rep_cobros_x_cliente(self):
+        sql = """
+                Select 
+                    RTRIM(ctpr.cob_num) as cob_num, RTRIM(cb.co_cli) as co_cli, c.cli_des, 
+                    cb.fecha as fecha_cob, mont_doc, RTRIM(ctpr.forma_pag) as forma_pag, 
+                    RTRIM(ctpr.co_ban) as co_ban, RTRIM(ctpr.cod_caja) as cod_caja, ctpr.fecha_che 
+                From 
+                    saCobroTPReng as ctpr LEFT JOIN saCobro as cb ON ctpr.cob_num = cb.cob_num 
+                    LEFT JOIN saCliente as c ON cb.co_cli = RTRIM(c.co_cli) 
+                Where c.inactivo = 'FALSE'
+            """
+        df = get_read_sql(sql, **self.dict_con_admin)
+        return DataFrame(df)
+
     def articulos_profit_con_su_cuenta_contable(self):
         df = self.articulos_profit()
         art_profit = DataFrame(df)
@@ -453,6 +467,7 @@ class datos_profit:
         return set(df['doc_num'])
 
 
+
     def get_monto_tasa_bcv_del_dia(self):
         df_data_bcv = p_est_bcv()  # archivo BCV
         fila_tasa_dia = df_data_bcv[df_data_bcv['fecha'] == df_data_bcv['fecha'].max()]
@@ -594,6 +609,18 @@ class datos_profit:
         id_new_client= clientes_filtro['num_cod_client'].max() + 1
         return f"CL{id_new_client}"
     
+    def resumen_facturas(self, fecha_ini , fecha_fin):
+        sql = f"""EXEC [RepFacturaVentaxFecha]
+                    @dCo_fecha_d = '{fecha_ini}',
+                    @dCo_fecha_h = '{fecha_fin}',
+                    @cAnulado = N'NOT'
+            """
+        df = get_read_sql(sql, **self.dict_con_admin)
+        df['co_cli'] = df['co_cli'].str.strip()
+        df['cli_des'] = df['cli_des'].str.strip()
+        df['doc_num'] = df['doc_num'].str.strip()
+        df['fec_emis'] = df['fec_emis'].dt.normalize()
+        return df 
  
 # Ejemplo de uso:    
 # pcta = datos_profit(host='10.100.104.11', data_base_admin='BANTEL_I',  data_base_cont='TBANTEL_C')    

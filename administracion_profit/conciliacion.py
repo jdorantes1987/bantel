@@ -21,8 +21,8 @@ def get_edo_cta_con_identificador():
 def get_comprobantes_con_identif():
     lista_columnas = ['fec_emis', 'docref', 'descri', 'monto', 'identificador']
     df = get_comprobantes(cuenta='1.1.02.01.0003', 
-                          fecha_desde='2024-05-01', 
-                          fecha_hasta= '2024-05-31')
+                          fecha_desde='2024-10-01', 
+                          fecha_hasta= '2024-10-31')
     df['descri'] = df['descri'].str[:40]  # Extrae los primeros 50 caracteres de la izquierda
     df['monto'] = df.apply(lambda x: x['monto_d'] - x['monto_h'], axis=1)
     df_monto_ident = get_identificador_unicos(df, 'monto')
