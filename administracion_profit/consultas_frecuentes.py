@@ -33,7 +33,7 @@ from edo_cta_registrar_mov import establecer_color_amarillo_mov_edo_cta_por_regi
 # print('El valor de la tasa para la fecha indicada es de:', get_tasa_fecha('20240612')) # Obtiene valor la TASA según la FECHA indicada
 # print('\ncantidad de $ {:,.2f}'.format(a_divisas_segun_fecha(36477.9, '20240704')))  # Obtiene MONTO OPERACIÓN en usd según la tasa de la FECHA indicada
 # print('Equivalente en $ {:,.2f}'.format(a_divisas(2939.34)))  # Convertir a Dólares
-# print('Equivalente en Bs. {:,.2f}'.format(a_bolivares(10)))  # Convertir a Bolívares
+# print('Equivalente en Bs. {:,.2f}'.format(a_bolivares(20)))  # Convertir a Bolívares
 
 # -->ESTADO DE CUENTA
 # Registrar los movimientos bancarios seleccionados del estado de cuenta actual banesco
@@ -46,7 +46,7 @@ from edo_cta_registrar_mov import establecer_color_amarillo_mov_edo_cta_por_regi
 
 # -->BANCO
 # Muestra los resultados de la busqueda en los movimientos bancarios
-# print(buscar_en_mov_de_banco(texto_a_buscar="Bracho", anio='all', mes='all').to_string())
+# print(buscar_en_mov_de_banco(texto_a_buscar="coromo", anio='all', mes='all').to_string())
 
 # -->PROVEEDORES
 # print(buscar_en_proveedores('V133396426').reset_index(drop=True).to_string())  # Muestra los resultados de la busqueda en la tabla de PROVEEDORES

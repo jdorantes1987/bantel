@@ -467,6 +467,7 @@ class datos_profit:
         return set(df['doc_num'])
 
 
+
     def get_monto_tasa_bcv_del_dia(self):
         df_data_bcv = p_est_bcv()  # archivo BCV
         fila_tasa_dia = df_data_bcv[df_data_bcv['fecha'] == df_data_bcv['fecha'].max()]
@@ -608,6 +609,18 @@ class datos_profit:
         id_new_client= clientes_filtro['num_cod_client'].max() + 1
         return f"CL{id_new_client}"
     
+    def resumen_facturas(self, fecha_ini , fecha_fin):
+        sql = f"""EXEC [RepFacturaVentaxFecha]
+                    @dCo_fecha_d = '{fecha_ini}',
+                    @dCo_fecha_h = '{fecha_fin}',
+                    @cAnulado = N'NOT'
+            """
+        df = get_read_sql(sql, **self.dict_con_admin)
+        df['co_cli'] = df['co_cli'].str.strip()
+        df['cli_des'] = df['cli_des'].str.strip()
+        df['doc_num'] = df['doc_num'].str.strip()
+        df['fec_emis'] = df['fec_emis'].dt.normalize()
+        return df 
  
 # Ejemplo de uso:    
 # pcta = datos_profit(host='10.100.104.11', data_base_admin='BANTEL_I',  data_base_cont='TBANTEL_C')    
