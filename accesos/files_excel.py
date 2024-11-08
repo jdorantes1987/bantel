@@ -1,9 +1,9 @@
 from pandas import read_excel
 from pandas import to_datetime
 
-p_data_estadisticas_bcv = 'accesos/excel/tasas_BCV.xlsx'  # ruta relativa, regresa a la carpeta anterior
+p_data_estadisticas_bcv = '../bantel/accesos/excel/tasas_BCV.xlsx'  # ruta relativa, regresa a la carpeta anterior
 p_data_estadisticas_bcv_datapy = '//10.100.104.1/AdministracionFinanzas/DESARROLLO_DataProfit/'  # ruta relativa, regresa a la carpeta anterior
-p_data_estadisticas_par = 'accesos/excel/tasas_Par.xlsx'  # ruta relativa, regresa a la carpeta anterior
+p_data_estadisticas_par = '../bantel/accesos/excel/tasas_Par.xlsx'  # ruta relativa, regresa a la carpeta anterior
 p_data_comprobantes_manuales = 'C:/Users/jdorantes/Documents/Analisis/Desarrollos/DATA_COMPROBANTES_X_CONTABILIZAR.xlsx'
 p_data_revision_contabilidad = 'C:/Users/jdorantes/Documents/Analisis/Revision Contabilidad.xlsm'
 p_data_edo_cta_banesco = 'C:/Users/jdorantes/Documents/Analisis/Estados de Cuenta/Banesco/2024/06. JUN/Banesco Junio 2024.xlsx'
