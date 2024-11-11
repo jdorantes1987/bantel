@@ -37,16 +37,16 @@ from edo_cta_registrar_mov import establecer_color_amarillo_mov_edo_cta_por_regi
 
 # -->ESTADO DE CUENTA
 # Registrar los movimientos bancarios seleccionados del estado de cuenta actual banesco
-# registrar_mov_ban_edo_cta()
+registrar_mov_ban_edo_cta()
 # print(mov_bcarios_pendientes_por_identif_en_edo_cta_banesco('2024-08-01').to_string())
-# establecer_color_amarillo_mov_edo_cta_por_registrar_banesco()
+establecer_color_amarillo_mov_edo_cta_por_registrar_banesco()
 # get_edo_cta_bs_y_usd()  # Estado de cuenta banesco en $$$$$$$
 ## Muestra los resultados de las comisiones e IGTF a registrar manualmente
 # print(get_mov_igtf_comisiones().to_string())
 
 # -->BANCO
 # Muestra los resultados de la busqueda en los movimientos bancarios
-print(buscar_en_mov_de_banco(texto_a_buscar="MB2410006", anio='all', mes='all').to_string())
+# print(buscar_en_mov_de_banco(texto_a_buscar="MB2410006", anio='all', mes='all').to_string())
 
 # -->PROVEEDORES
 # print(buscar_en_proveedores('V133396426').reset_index(drop=True).to_string())  # Muestra los resultados de la busqueda en la tabla de PROVEEDORES
