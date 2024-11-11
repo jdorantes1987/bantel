@@ -1,9 +1,9 @@
+import ssl
 from pandas import DataFrame
 from pandas import concat
 from pandas import to_datetime
 import locale
 import time
-# import urllib.request
 from urllib.request import build_opener, install_opener, urlretrieve, urlcleanup
 from xlrd import open_workbook
 from matplotlib.pyplot import subplots, title, show, tight_layout, xticks
@@ -11,9 +11,8 @@ from seaborn import heatmap, set_style, lineplot
 from banco_central.dolar_paralelo import datos_estadisticas_tasas
 from accesos.files_excel import p_data_estadisticas_bcv as p_est_bcv, p_data_estadisticas_bcv_datapy as p_est_bcv_datapy
 from accesos.files_excel import datos_estadisticas_tasas as datos_estad_bcv
-from ssl import create_default_context
 
-context = create_default_context()
+ssl._create_default_https_context = ssl._create_unverified_context
 url_base = 'https://www.bcv.org.ve/sites/default/files/EstadisticasGeneral'
 dic_f_usd_year = {'2024': ['2_1_2d24_smc.xls', '2_1_2c24_smc.xls','2_1_2b24_smc.xls', '2_1_2a24_smc.xls'],
                   '2023': ['2_1_2d23_smc.xls', '2_1_2c23_smc.xls', '2_1_2c23_smc_60.xls', '2_1_2a23_smc.xls'],
