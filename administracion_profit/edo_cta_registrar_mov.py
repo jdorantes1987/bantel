@@ -61,8 +61,8 @@ def establecer_color_amarillo_mov_edo_cta_por_registrar_banesco():
     mov_pdtes = df_edo_cta[df_edo_cta['Referencia'].isin(mov_x_registrar)]
     # Obtiene los movimientos conciliados
     mov_concil = df_edo_cta[~df_edo_cta['Referencia'].isin(mov_x_registrar)]
-    print('Movimientos del edo. cta. Banesco por identificar en libro')
-    print(mov_pdtes.to_string())
+    # print('Movimientos del edo. cta. Banesco por identificar en libro')
+    # print(mov_pdtes.to_string())
     sheet = wb_edo_cta.worksheets[0]
     # Recorre los movimientos conciliados y quita el color de fondo de la celda
     for ind in mov_concil.index:
@@ -79,7 +79,7 @@ def establecer_color_amarillo_mov_edo_cta_por_registrar_banesco():
         print('Ha ocurrido un error:', e)
     finally:
         wb_edo_cta.close()
-        print('Archivo Cerrado.')
+        print('Proceso terminado!', 'Archivo Cerrado.')
 
 #  Este procedimiento hace cruce por REFERENCIA BANCARIA entre el edo cta. banesco y los mov de su cuenta contable en libros
 def mov_bcarios_pendientes_por_identif_en_edo_cta_banesco(fecha_ini):

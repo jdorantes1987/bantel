@@ -1,7 +1,6 @@
-from pandas import read_excel
-from pandas import to_datetime
-from pandas import merge_asof
-from pandas import DataFrame
+from pandas import read_excel, merge_asof, to_datetime, DataFrame, concat
+import glob
+import os
 from accesos.files_excel import datos_estadisticas_tasas as p_est_bcv
 from accesos.files_excel import p_data_edo_cta_banesco as p_edo_cta_banesco
 from accesos.datos import conjunto_ref_mov_bcrios
@@ -41,8 +40,21 @@ def get_mov_bcarios_pdtes_por_identificar(str_date):
     return mov_sin_registrar
 
 
-# print(get_edo_cta_bs_y_usd())
 
+def read_data_estados_de_cuenta(directory, name_pattern):
+    # Lista para almacenar los DataFrames
+    dataframes = []
+    # Recorre todos los subdirectorios y archivos que cumplan con el criterio
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            print(file)
+            if glob.fnmatch.fnmatch(file, name_pattern):
+                file_path = os.path.join(root, file)
+                df = read_excel(file_path)
+                dataframes.append(df)
 
+    # Combina todos los DataFrames en uno solo
+    combined_df = concat(dataframes, ignore_index=True)
+    return combined_df
 
 
