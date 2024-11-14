@@ -45,11 +45,13 @@ from edo_cta_registrar_mov import establecer_color_amarillo_mov_edo_cta_por_regi
 # print(get_mov_igtf_comisiones().to_string())
 # directory = "C:/Users/jdorantes/Documents/Analisis/Estados de Cuenta/Banesco/2024/"
 # file_pattern = "*2024*.xlsx"
-# read_data_estados_de_cuenta(directory, file_pattern).to_excel('read_data_estados_de_cuenta.xlsx')
+# df = read_data_estados_de_cuenta(directory, file_pattern)
+# df['Referencia'] = df['Referencia'].astype('str')
+# df[df['Pendiente'].str.upper()=='SI'].to_excel('partidas pendientes banesco.xlsx')
 
 # -->BANCO
 # Muestra los resultados de la busqueda en los movimientos bancarios
-print(buscar_en_mov_de_banco(texto_a_buscar="Cana", anio='all', mes='all').to_string())
+# print(buscar_en_mov_de_banco(texto_a_buscar="Cana", anio='all', mes='all').to_string())
 
 
 # -->PROVEEDORES
