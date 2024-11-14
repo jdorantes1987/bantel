@@ -49,7 +49,7 @@ from edo_cta_registrar_mov import establecer_color_amarillo_mov_edo_cta_por_regi
 
 # -->BANCO
 # Muestra los resultados de la busqueda en los movimientos bancarios
-# print(buscar_en_mov_de_banco(texto_a_buscar="TRANSPO", anio='all', mes='all').to_string())
+print(buscar_en_mov_de_banco(texto_a_buscar="Cana", anio='all', mes='all').to_string())
 
 
 # -->PROVEEDORES

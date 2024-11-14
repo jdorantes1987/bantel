@@ -37,7 +37,7 @@ def new_line_comprobante(id_cbte, fecha_emision, renglon, m_debe, m_haber, descr
              "NULL, NULL, 'JACK', '{fech_ins}', " \
              "'JACK', '{fech_mod}')".format(id_Cbte=id_cbte, fech_emi=fecha_emision, reng=renglon, c_cta=cod_cta,
                                             descr=descrip, m_deb=m_debe, m_hab=m_haber, fech_ins=fecha_insert,
-                                            fech_mod=fecha_mod, aux=auxiliar, ref=doc_refer)
+                                            fech_mod=fecha_mod, aux=auxiliar, ref=doc_refer).replace("'NULL'", 'NULL')
     insert_sql(strsql, **dict_con_contab)
 
 def eliminar_comprobante(id_cbte):
