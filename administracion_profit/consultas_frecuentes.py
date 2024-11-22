@@ -22,6 +22,7 @@ from facturas import diccionario_facturacion, diccionario_facturacion_total_por_
 from edo_cta_registrar_mov import registrar_mov_ban_edo_cta
 from edo_cta_registrar_mov import mov_bcarios_pendientes_por_identif_en_edo_cta_banesco
 from edo_cta_registrar_mov import establecer_color_amarillo_mov_edo_cta_por_registrar_banesco
+from seniat.seniat import consultar_rif
 
 # -->BCV
 # update_file_tasa_bcv()
@@ -32,7 +33,7 @@ from edo_cta_registrar_mov import establecer_color_amarillo_mov_edo_cta_por_regi
 # print('Tasa USD del día:', get_date_value(), '\n' * 1, get_tasa())
 # print('El valor de la tasa para la fecha indicada es de:', get_tasa_fecha('20240612')) # Obtiene valor la TASA según la FECHA indicada
 # print('\ncantidad de $ {:,.2f}'.format(a_divisas_segun_fecha(36477.9, '20240704')))  # Obtiene MONTO OPERACIÓN en usd según la tasa de la FECHA indicada
-# print('Equivalente en $ {:,.2f}'.format(a_divisas(2939.34)))  # Convertir a Dólares
+# print('Equivalente en $ {:,.2f}'.format(a_divisas(549.38)))  # Convertir a Dólares
 # print('Equivalente en Bs. {:,.2f}'.format(a_bolivares(15.6)))  # Convertir a Bolívares
 
 # -->ESTADO DE CUENTA
@@ -51,7 +52,7 @@ from edo_cta_registrar_mov import establecer_color_amarillo_mov_edo_cta_por_regi
 
 # -->BANCO
 # Muestra los resultados de la busqueda en los movimientos bancarios
-# print(buscar_en_mov_de_banco(texto_a_buscar="Cana", anio='all', mes='all').to_string())
+# print(buscar_en_mov_de_banco(texto_a_buscar="adorn", anio='all', mes='all').to_string())
 
 
 # -->PROVEEDORES
@@ -79,6 +80,13 @@ patron3 = r"^414\d{7}$" # Expresión regular para números de teléfono que comi
 # factura_venta_con_su_detalle_en_usd(anio=2023, usd=True).to_excel('Facturacion en Bs y Usd al 31-12-2024.xlsx')  # DETALLE de FACTUTACIÓN archivo Excel
 # print(facturacion_x_anio(usd=True).to_string()) # obtiene el TOTAL BASE IMPONIBLE en BS o $ de la FACTURACIÓN por AÑO y MES
 # graf_calor_ventas(usd=False) # GRÁFICO facturación
+
+
+# -->SENIAT
+
+# print(consultar_rif('V037999055')['razon_soc'])
+
+
 
 
 
