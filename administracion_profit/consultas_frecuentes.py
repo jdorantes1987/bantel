@@ -83,8 +83,7 @@ patron3 = r"^414\d{7}$" # Expresión regular para números de teléfono que comi
 
 
 # -->SENIAT
-
-# print(consultar_rif('V037999055')['razon_soc'])
+print(consultar_rif('J000563241'))
 
 
 
