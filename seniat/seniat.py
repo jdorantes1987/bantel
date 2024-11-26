@@ -1,9 +1,12 @@
 from io import BytesIO
+from pprint import pprint
 
 from bs4 import BeautifulSoup
 import requests
 from PIL import Image
 
+from digito_verificador import DigitoVerificador
+    
 def leer_imagen(url):
     session_obj = requests.Session()
     response = session_obj.get(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"})
@@ -68,8 +71,21 @@ def consultar_rif(rif):
                 columns = row.find_all(['th', 'td'])
                 data = [column.text.strip().split("\n") for column in columns]
             datos_contibuyente['actividad_economica'] = data[0][0][21:].strip()    
-            datos_contibuyente['condicion_agente'] = data[0][2].lstrip()
+            tipo = len(data[0])
+            if tipo == 3:
+                datos_contibuyente['condicion_agente'] = data[0][2].lstrip()
+            else:
+                datos_contibuyente['condicion_agente'] = data[0][2].strip() + ' ' + data[0][5].lstrip()
     return datos_contibuyente
+
+
+if __name__ == '__main__' :
+    rif = DigitoVerificador('57496').get_rif()
+    no_existe = 'n/e'
+    if rif != no_existe:
+        pprint(consultar_rif(rif), sort_dicts=False)
+    else:
+        print(no_existe)
         
 
 
