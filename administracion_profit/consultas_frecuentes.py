@@ -22,7 +22,7 @@ from facturas import diccionario_facturacion, diccionario_facturacion_total_por_
 from edo_cta_registrar_mov import registrar_mov_ban_edo_cta
 from edo_cta_registrar_mov import mov_bcarios_pendientes_por_identif_en_edo_cta_banesco
 from edo_cta_registrar_mov import establecer_color_amarillo_mov_edo_cta_por_registrar_banesco
-from seniat.seniat import consultar_rif
+from seniat.consultar_rif import consultar_rif
 
 # -->BCV
 # update_file_tasa_bcv()
@@ -57,7 +57,7 @@ from seniat.seniat import consultar_rif
 
 # -->PROVEEDORES
 # print(buscar_en_proveedores('V133396426').reset_index(drop=True).to_string())  # Muestra los resultados de la busqueda en la tabla de PROVEEDORES
-# print(buscar_en_compras(str_search='319664', anio='all').to_string())  # Muestra los resultados de la busqueda en las COMPRAS
+print(buscar_en_compras(str_search='4003810', anio='all').to_string())  # Muestra los resultados de la busqueda en las COMPRAS
 # print(top_proveedores().to_string())  # TOP Facturación por proveedores
 
 # -->CLIENTES

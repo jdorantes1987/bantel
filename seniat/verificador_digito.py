@@ -1,6 +1,6 @@
-from verificador_documento import VerificadorDocumento
+from seniat.verificador_documento import VerificadorDocumento
 
-class DigitoVerificador():
+class VerificadorDigito():
     def __init__(self, documento) -> None:
         self.documento_formateado = VerificadorDocumento(documento).get_documento_formateado()
     
@@ -28,4 +28,4 @@ class DigitoVerificador():
                     
     
 if __name__ == '__main__':
-    print(DigitoVerificador('57496') .get_rif())
+    print(VerificadorDigito('57496') .get_rif())
