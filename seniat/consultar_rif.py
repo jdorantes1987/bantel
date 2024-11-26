@@ -79,7 +79,7 @@ def consultar_rif(rif):
     return datos_contibuyente
 
 if __name__ == '__main__' :
-    rif = VerificadorDigito('J308354813').get_rif()
+    rif = VerificadorDigito('J306148973').get_rif()
     no_existe = 'n/e'
     if rif != no_existe:
         pprint(consultar_rif(rif), sort_dicts=False)
