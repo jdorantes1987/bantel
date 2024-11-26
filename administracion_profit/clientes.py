@@ -12,7 +12,7 @@ def search_clients(string_s, **kwargs):
     df = clientes()
     df['co_cli'] = df['co_cli'].str.strip()
     df['fe_us_in'] = to_datetime(df['fe_us_in']).dt.normalize()
-    resul = search_df(string_s, df)[['co_cli', 'cli_des', 'rif', 'dir_ent2', 'telefonos', 'respons', 'direc1', 'fe_us_in', 'campo3']]
+    resul = search_df(string_s, df)[['co_cli', 'cli_des', 'rif', 'dir_ent2', 'telefonos', 'respons', 'direc1', 'fe_us_in', 'campo3', 'campo8']]
     if acortar_datos := kwargs.get('resumir_datos', False):
         resul['cli_des'] = resul['cli_des'].str[:30]  # Extrae los primeros 40 caracteres de la izquierda
         resul['direc1'] = resul['direc1'].str[:20]  # Extrae los primeros 40 caracteres de la izquierda

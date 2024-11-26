@@ -56,7 +56,7 @@ def establecer_color_amarillo_mov_edo_cta_por_registrar_banesco():
     df_edo_cta = df[df['Fecha'].notnull()].copy()  # FILTRAR VALORES NO NULOS
     df_edo_cta['Comentarios'] = df_edo_cta['Comentarios'].str[:50]
     wb_edo_cta = load_workbook(p_edo_cta_banesco)
-    mov_x_registrar = get_mov_edo_cta_pdtes_por_regist('2024-10-01')
+    mov_x_registrar = get_mov_edo_cta_pdtes_por_regist('2024-08-01')
     # Obtiene los movimientos por conciliar
     mov_pdtes = df_edo_cta[df_edo_cta['Referencia'].isin(mov_x_registrar)]
     # Obtiene los movimientos conciliados
@@ -66,6 +66,8 @@ def establecer_color_amarillo_mov_edo_cta_por_registrar_banesco():
     sheet = wb_edo_cta.worksheets[0]
     # Recorre los movimientos conciliados y quita el color de fondo de la celda
     for ind in mov_concil.index:
+        cell_col_pendiente = sheet.cell(row=[ind][0] + 2, column=11)
+        cell_col_pendiente.value = ''
         estatus = sheet.cell(row=[ind][0] + 2, column=9)
         estatus.fill = style_sin_color
     # Recorre los movimientos por conciliar y aplica color amarillo al fondo de la celda
