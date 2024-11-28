@@ -22,10 +22,10 @@ class VerificadorDigito():
                                         + int(doc[7:8]) * 3 + int(doc[8:9]) * 2) % 11)  
             digito_verificador =  formula if (letra_rif == 'V' and formula <= 9) or (letra_rif in ['J', 'E']  and formula != 10) else 0
             rif =  doc + str(digito_verificador) if len(doc) == 9 else doc
-            return rif if rif[-1] == str(digito_verificador) else 'RIF incorrecto'
+            return rif if rif[-1] == str(digito_verificador) else 'Error en dígito verificador'
         else:
             return no_existe
                     
     
 if __name__ == '__main__':
-    print(VerificadorDigito('57496') .get_rif())
+    print(VerificadorDigito('j003231282') .get_rif())

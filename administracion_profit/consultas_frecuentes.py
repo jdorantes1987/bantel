@@ -25,7 +25,7 @@ from edo_cta_registrar_mov import establecer_color_amarillo_mov_edo_cta_por_regi
 from seniat.consultar_rif import consultar_rif
 
 # -->BCV
-update_file_tasa_bcv()
+# update_file_tasa_bcv()
 # update_file_tasa_par()
 # g1bcv(anio=2024, col_valores='venta_ask2')  # var_tasas o venta_ask2
 # g2bcv(2023, 'venta_ask2')  # var_tasas o venta_ask2
@@ -57,7 +57,7 @@ update_file_tasa_bcv()
 
 # -->PROVEEDORES
 # print(buscar_en_proveedores('V133396426').reset_index(drop=True).to_string())  # Muestra los resultados de la busqueda en la tabla de PROVEEDORES
-# print(buscar_en_compras(str_search='000089', anio='all').to_string())  # Muestra los resultados de la busqueda en las COMPRAS
+print(buscar_en_compras(str_search='J501676690', anio='all').to_string())  # Muestra los resultados de la busqueda en las COMPRAS
 # print(top_proveedores().to_string())  # TOP Facturación por proveedores
 
 # -->CLIENTES

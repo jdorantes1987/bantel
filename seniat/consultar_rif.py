@@ -21,65 +21,75 @@ def consultar_rif(rif):
     imagen = Image.open(BytesIO(response.content))
     # rif = input('ingrese el rif:')
     imagen.show()
-    cod_imagen = input('ingrese codigo de imagen:')
+    cod_imagen = input('ingrese código de imagen:')
     # Cerrar el objeto BytesIO
     imagen.close()
     # Eliminar la referencia al objeto BytesIO
     del imagen
-    #session_obj = requests.Session()
-    response = session_obj.get(f'http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp?p_rif={rif}&codigo={cod_imagen}', 
-                                headers=user_agent)
-    soup = BeautifulSoup(response.content, "html.parser")
-    tables = soup.find_all('table')
-    # Itera sobre cada tabla
-    # for table in tables:
-    #     print("Nueva Tabla:")
-    #     for row in table.find_all('tr'):
-    #         columns = row.find_all(['th', 'td'])
-    #         #data = [column.text.strip().replace('\xa0', '').split("\n")[2][10:].strip() for column in columns]
-    #         data = [column.text.strip() for column in columns]
-    #         print(data)
-    
     datos_contibuyente = {}
-    for row in tables[1].find_all('tr'):
-        columns = row.find_all(['th', 'td'])
-        data = [column.text.strip().replace('\xa0', '').split("\n") for column in columns]
-        #data = [column.text.strip().replace('\xa0', '').split("\n")[2][10:].strip() for column in columns]
-    datos_contibuyente['existe'] = data[0]
-    respuesta = ', '.join(datos_contibuyente['existe'])
-    if not 'No existe' in respuesta and not 'no coincide' in respuesta:
-        datos_contibuyente['razon_soc'] = datos_contibuyente['existe'][2][10:]
-        for row in tables[2].find_all('tr'):
-            columns = row.find_all(['th', 'td'])
-            data = [column.text for column in columns]
-        data = data[0].strip().replace('\r', '').split("\n")
-        tipo_contribuyente = data[0]
+    while True:
+        response = session_obj.get(f'http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp?p_rif={rif}&codigo={cod_imagen}', 
+                                    headers=user_agent)
+        soup = BeautifulSoup(response.content, "html.parser")
+        tables = soup.find_all('table')
+        # Itera sobre cada tabla
+        # for table in tables:
+        #     print("Nueva Tabla:")
+        #     for row in table.find_all('tr'):
+        #         columns = row.find_all(['th', 'td'])
+        #         #data = [column.text.strip().replace('\xa0', '').split("\n")[2][10:].strip() for column in columns]
+        #         data = [column.text.strip() for column in columns]
+        #         print(data)
         
-        if not 'firma' in tipo_contribuyente:
-            ##Persona Jurídica
-            datos_contibuyente['actividad_economica'] = data[0][21:]
-            datos_contibuyente['condicion_agente'] = data[1][11:].lstrip() + data[2][32:].lstrip() + data[3].lstrip() + ' ' + data[4].lstrip()
-            datos_contibuyente['condicion_porcentaje'] = data[5].lstrip() + (data[6].lstrip() if len(data)==7 else "")
-        else:
-            #Persona Natural
+        for row in tables[1].find_all('tr'):
+            columns = row.find_all(['th', 'td'])
+            data = [column.text.strip().replace('\xa0', '').split("\n") for column in columns]
+            #data = [column.text.strip().replace('\xa0', '').split("\n")[2][10:].strip() for column in columns]
+        datos_contibuyente['existe'] = data[0]
+        respuesta = ', '.join(datos_contibuyente['existe'])
+        if not 'No existe' in respuesta and not 'no coincide' in respuesta:
+            datos_contibuyente['razon_soc'] = datos_contibuyente['existe'][2][10:]
             for row in tables[2].find_all('tr'):
                 columns = row.find_all(['th', 'td'])
                 data = [column.text for column in columns]
-            datos_contibuyente['firmas'] = data[0].strip()
-
-            for row in tables[3].find_all('tr'):
-                columns = row.find_all(['th', 'td'])
-                data = [column.text.strip().split("\n") for column in columns]
-            datos_contibuyente['actividad_economica'] = data[0][0][21:].strip()    
-            tipo = len(data[0])
-            if tipo == 3:
-                datos_contibuyente['condicion_agente'] = data[0][2].lstrip()
+            data = data[0].strip().replace('\r', '').split("\n")
+            tipo_contribuyente = data[0]
+            
+            if not 'firma' in tipo_contribuyente:
+                ##Persona Jurídica
+                datos_contibuyente['actividad_economica'] = data[0][21:]
+                datos_contibuyente['condicion_agente'] = data[1][11:].lstrip() + data[2][32:].lstrip() + data[3].lstrip() + ' ' + data[4].lstrip()
+                datos_contibuyente['condicion_porcentaje'] = data[5].lstrip() + (data[6].lstrip() if len(data)==7 else "")
             else:
-                datos_contibuyente['condicion_agente'] = data[0][2].strip() + ' ' + data[0][5].lstrip()
+                #Persona Natural
+                for row in tables[2].find_all('tr'):
+                    columns = row.find_all(['th', 'td'])
+                    data = [column.text for column in columns]
+                datos_contibuyente['firmas'] = data[0].strip()
+
+                for row in tables[3].find_all('tr'):
+                    columns = row.find_all(['th', 'td'])
+                    data = [column.text.strip().split("\n") for column in columns]
+                datos_contibuyente['actividad_economica'] = data[0][0][21:].strip()    
+                tipo = len(data[0])
+                if tipo == 3:
+                    datos_contibuyente['condicion_agente'] = data[0][2].lstrip()
+                else:
+                    datos_contibuyente['condicion_agente'] = data[0][2].strip() + ' ' + data[0][5].lstrip()
+            break
+        else:
+            if 'No existe' in respuesta:
+                datos_contibuyente['existe'] = 'No existe el RIF consultado'
+                break
+            elif 'no coincide' in respuesta:
+                print(datos_contibuyente)
+                cod_imagen = input('ingrese nuevamente el código de imagen:')
+            
     return datos_contibuyente
 
+
 if __name__ == '__main__' :
-    rif = VerificadorDigito('J306148973').get_rif()
+    rif = VerificadorDigito('15152791').get_rif()
     no_existe = 'n/e'
     if rif != no_existe:
         pprint(consultar_rif(rif), sort_dicts=False)
