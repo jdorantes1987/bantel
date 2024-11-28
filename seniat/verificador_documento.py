@@ -35,7 +35,7 @@ class VerificadorDocumento():
         return ''.join([caracter for caracter in cadena if caracter.isdigit()])
     
     def get_documento_formateado(self):
-        documento_formatado = self.documento
+        documento_formatado = self.documento.upper()
         es_documento_valido = self.__es_documento_valido()
         tiene_letra = len(self.__get_letra()) > 0
         if es_documento_valido:

@@ -80,7 +80,7 @@ def get_data_usd_bcv_web_last_qt():
     data = DataFrame()
     name_file_tasa_download = list(dic_f_usd_year.values())[0][0]  # Convierte el diccionario en una lista y obtiene el primer elemento
     url = url_base + f'/{name_file_tasa_download}'
-    socket.setdefaulttimeout(2) # 3 seconds
+    socket.setdefaulttimeout(3) # 3 seconds
     #  cambiar el encabezado del agente de usuario
     opener = build_opener()
     #  agregar el encabezado de solicitud de agente de usuario
@@ -125,19 +125,22 @@ def actulizar_file_tasas():
     locale.setlocale(locale.LC_ALL, 'es_ES')
     df_file_tasa = datos_estad_bcv()
     df_file_tasa_new = get_data_usd_bcv_web_last_qt()
-    name_file_tasa_download = list(dic_f_usd_year.values())[0][0]  # Obtiene el primer nombre de la lista de diccionario
-    df_file_tasa_filtred = df_file_tasa[df_file_tasa['archivo'] != name_file_tasa_download]
-    new_file_tasa = [df_file_tasa_new, df_file_tasa_filtred]
-    df = concat(new_file_tasa).reset_index(drop=True)
-    df['año'] = df['fecha'].dt.year
-    df['mes'] = df['fecha'].dt.month
-    df['dia'] = df['fecha'].dt.day
-    df['mes_'] = df['fecha'].dt.month_name(locale='es_ES').str[:3]
-    locale.setlocale(locale.LC_ALL, '')
-    df['var_tasas'] = df['venta_ask2'].diff(
-        periods=-1)  # Permite calcular la diferencia que existe entre el valor de la celda actual con respecto a la anterior
-    df.to_excel(p_est_bcv)
-    # df.to_excel(p_est_bcv_datapy) # Código agregado el 16-05-2024
+    # Si no está vacio el dataframe obtenido de la web, no actualizar archivo histórico de tasas.
+    if not df_file_tasa_new.empty:
+        name_file_tasa_download = list(dic_f_usd_year.values())[0][0]  # Obtiene el primer nombre de la lista de diccionario
+        df_file_tasa_filtred = df_file_tasa[df_file_tasa['archivo'] != name_file_tasa_download]
+        new_file_tasa = [df_file_tasa_new, df_file_tasa_filtred]
+        df = concat(new_file_tasa).reset_index(drop=True)
+        df['año'] = df['fecha'].dt.year
+        df['mes'] = df['fecha'].dt.month
+        df['dia'] = df['fecha'].dt.day
+        df['mes_'] = df['fecha'].dt.month_name(locale='es_ES').str[:3]
+        locale.setlocale(locale.LC_ALL, '')
+        df['var_tasas'] = df['venta_ask2'].diff(
+            periods=-1)  # Permite calcular la diferencia que existe entre el valor de la celda actual con respecto a la anterior
+        df.to_excel(p_est_bcv)
+    else:
+        print('No se puedo actualizar el archivo histórico de tasas BCV')
 
 
 def row_index(row):
@@ -212,3 +215,4 @@ def grafic3(anio, valores_eval):
 
 if __name__ == '__main__':
     print(get_data_usd_bcv_web_last_qt())
+    #actulizar_file_tasas()

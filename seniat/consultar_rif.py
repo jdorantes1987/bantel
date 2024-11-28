@@ -59,7 +59,7 @@ def consultar_rif(rif):
             ##Persona Jurídica
             datos_contibuyente['actividad_economica'] = data[0][21:]
             datos_contibuyente['condicion_agente'] = data[1][11:].lstrip() + data[2][32:].lstrip() + data[3].lstrip() + ' ' + data[4].lstrip()
-            datos_contibuyente['condicion_porcentaje'] = data[6].lstrip()
+            datos_contibuyente['condicion_porcentaje'] = data[5].lstrip() + (data[6].lstrip() if len(data)==7 else "")
         else:
             #Persona Natural
             for row in tables[2].find_all('tr'):
