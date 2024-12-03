@@ -53,8 +53,8 @@ def consultar_rif(rif):
                 if not 'firma' in tipo_contribuyente:
                     ##Persona Jurídica
                     datos_contibuyente['actividad_economica'] = data[0][21:]
-                    datos_contibuyente['condicion_agente'] = data[1][11:].lstrip() + data[2][32:].lstrip() + data[3].lstrip() + ' ' + data[4].lstrip()
-                    datos_contibuyente['condicion_porcentaje'] = data[5].lstrip() + (data[6].lstrip() if len(data)==7 else "")
+                    datos_contibuyente['condicion_agente'] = data[1][11:].lstrip() + data[2][32:].lstrip() + data[3].lstrip() + ' ' + data[4].lstrip() if len(data)>3 else '' 
+                    datos_contibuyente['condicion_porcentaje'] = (data[2].lstrip() if len(data) == 3 else data[5].lstrip()) + (data[6].lstrip() if len(data)==7 else "")
                 else:
                     #Persona Natural
                     for row in tables[2].find_all('tr'):
@@ -87,7 +87,7 @@ def consultar_rif(rif):
 
 
 if __name__ == '__main__' :
-    rif = VerificadorDigito('j306672982').get_rif()
+    rif = VerificadorDigito('J407388347').get_rif()
     no_existe = 'n/e'
     if rif != no_existe:
         pprint(consultar_rif(rif), sort_dicts=False)
