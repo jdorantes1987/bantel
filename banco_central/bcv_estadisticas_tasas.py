@@ -80,7 +80,7 @@ def get_data_usd_bcv_web_last_qt():
     data = DataFrame()
     name_file_tasa_download = list(dic_f_usd_year.values())[0][0]  # Convierte el diccionario en una lista y obtiene el primer elemento
     url = url_base + f'/{name_file_tasa_download}'
-    socket.setdefaulttimeout(3) # 3 seconds
+    socket.setdefaulttimeout(5) # 3 seconds
     #  cambiar el encabezado del agente de usuario
     opener = build_opener()
     #  agregar el encabezado de solicitud de agente de usuario
