@@ -455,3 +455,6 @@ def get_last__nro_fact_venta():
                               FROM saFacturaVenta)
           """
     return get_read_sql(sql, **dict_con_admin)
+
+if __name__ == '__main__':
+   print(search_in_movbanco(texto_a_buscar="gasolina", anio='all', mes='all').to_string())

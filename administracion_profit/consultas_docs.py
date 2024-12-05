@@ -3,7 +3,7 @@ import plotly.figure_factory as ff
 import varios.zoho as zh
 
 # *******Datos de DECLARACION DE IMPUESTOS*******
-datos_declaracion = fact.datos_declaracion()
+# datos_declaracion = fact.datos_declaracion()
 # datos_declaracion['Monto'] = datos_declaracion['Monto'].apply('{:,.2f}'.format)
 # fig = ff.create_table(datos_declaracion)
 # fig.update_layout(autosize=True, width=500, height=150,)

@@ -18,52 +18,66 @@ def get_edo_cta_con_identificador():
     return get_identificador_unicos(df_edo_cta_sin_null, 'Monto')[lista_columnas]
 
 
-def get_comprobantes_con_identif():
+def get_comprobantes_con_identif(fecha_ini, fecha_fin):
     lista_columnas = ['fec_emis', 'docref', 'descri', 'monto', 'identificador']
     df = get_comprobantes(cuenta='1.1.02.01.0003', 
-                          fecha_desde='2024-10-01', 
-                          fecha_hasta= '2024-10-31')
+                          fecha_desde=fecha_ini, 
+                          fecha_hasta= fecha_fin)
     df['descri'] = df['descri'].str[:40]  # Extrae los primeros 50 caracteres de la izquierda
     df['monto'] = df.apply(lambda x: x['monto_d'] - x['monto_h'], axis=1)
     df_monto_ident = get_identificador_unicos(df, 'monto')
     return df_monto_ident[lista_columnas]
 
 
-def conjunto_montos_por_identificar_en_edo_cta():
+def conjunto_montos_por_identificar_en_edo_cta(fecha_ini, fecha_fin):
     conjunto_edo_cta = set(get_edo_cta_con_identificador()['identificador'])
-    conjunto_comprobantes = set(get_comprobantes_con_identif()['identificador'])
+    conjunto_comprobantes = set(get_comprobantes_con_identif(fecha_ini=fecha_ini, 
+                                                             fecha_fin=fecha_fin)['identificador'])
     return conjunto_edo_cta - conjunto_comprobantes
 
 
-def conjunto_montos_por_identificar_en_comprobantes():
+def conjunto_montos_por_identificar_en_comprobantes(fecha_ini, fecha_fin):
     conjunto_edo_cta = set(get_edo_cta_con_identificador()['identificador'])
-    conjunto_comprobantes = set(get_comprobantes_con_identif()['identificador'])
+    conjunto_comprobantes = set(get_comprobantes_con_identif(fecha_ini=fecha_ini, 
+                                                             fecha_fin=fecha_fin)['identificador'])
     return conjunto_comprobantes - conjunto_edo_cta
 
-def partidas_por_identificar_edo_cta():
+def partidas_por_identificar_edo_cta(fecha_ini, fecha_fin):
     mov_cta = get_edo_cta_con_identificador()  # Movimientos del edo cta banesco con el identificador unico en los montos
     # Al obtener las referencias repetidas en los mov de la cuenta, podré saber si el monto que no se cruza correponde al itf.
     cant_repeticiones_ref = mov_cta['Referencia'].value_counts()  # Cantidad de veces que se repiten los numeros de referencias bancarias
     # Obtiene las referencias que no se cruzan con el libro
-    mov_edo_cta_banesco_ptes = mov_cta[mov_cta['identificador'].isin(conjunto_montos_por_identificar_en_edo_cta())]
+    mov_edo_cta_banesco_ptes = mov_cta[mov_cta['identificador'].isin(conjunto_montos_por_identificar_en_edo_cta(fecha_ini=fecha_ini, 
+                                                                                                                fecha_fin=fecha_fin))]
     #  Combina el dataframe de los mov del edo cta banesco con la serie que contiene las repeticiones de las referencias bancarias
     mov_edo_cta_banesco_ptes2 = merge(mov_edo_cta_banesco_ptes, cant_repeticiones_ref, how='left', left_on='Referencia', right_on='Referencia')
     mov_edo_cta_banesco_ptes2.rename(columns={'count':'count_ref'}, inplace=True)
     return mov_edo_cta_banesco_ptes2
 
-def partidas_por_identificar_libro():
-    mov_cta = get_comprobantes_con_identif()  # Movimientos de la cuenta contable banesco con el identificador unico en los montos
+def partidas_por_identificar_libro(fecha_ini, fecha_fin):
+    mov_cta = get_comprobantes_con_identif(fecha_ini=fecha_ini, 
+                                           fecha_fin=fecha_fin)  # Movimientos de la cuenta contable banesco con el identificador unico en los montos
     # Al obtener las referencias repetidas en los mov de la cuenta, podré saber si el monto que no se cruza correponde al itf.
     cant_repeticiones_ref = mov_cta['docref'].value_counts()  # Cantidad de veces que se repiten los numeros de referencias bancarias
     # Obtiene las referencias que no se cruzan con el edo de cta
-    mov_cta_banco_banesco_ptes = mov_cta[mov_cta['identificador'].isin(conjunto_montos_por_identificar_en_comprobantes())]
+    mov_cta_banco_banesco_ptes = mov_cta[mov_cta['identificador'].isin(conjunto_montos_por_identificar_en_comprobantes(fecha_ini=fecha_ini, 
+                                                                                                                       fecha_fin=fecha_fin))]
     #  Combina el dataframe de los mov de cuenta contable banesco con la serie que contiene las repeticiones de las referencias bancarias
-    mov_cta_banco_banesco_pte2 = merge(mov_cta_banco_banesco_ptes, cant_repeticiones_ref, how='left', left_on='docref', right_on='docref')
-    mov_cta_banco_banesco_pte2.rename(columns={'count': 'count_ref'}, inplace=True)
+    mov_cta_banco_banesco_pte2 = merge(mov_cta_banco_banesco_ptes, cant_repeticiones_ref, 
+                                       how='left', 
+                                       left_on='docref', 
+                                       right_on='docref')
+    mov_cta_banco_banesco_pte2.rename(columns={'count': 'count_ref'}, 
+                                      inplace=True)
     return mov_cta_banco_banesco_pte2
 
-
-print('Partidas por identificar edo. cta:\n', partidas_por_identificar_edo_cta().to_string())
-partidas_por_identificar_edo_cta().to_excel('partidas_por_identificar_edo_cta.xlsx')
-print('Partidas por identificar libro:\n', partidas_por_identificar_libro().to_string())
-partidas_por_identificar_libro().to_excel('partidas_por_identificar_libro.xlsx')
+if __name__ == '__main__' :
+    fecha_i, fecha_f = '20241101', '20241130'
+    print('Partidas por identificar edo. cta:\n', partidas_por_identificar_edo_cta(fecha_ini=fecha_i, 
+                                                                                   fecha_fin=fecha_f).to_string())
+    partidas_por_identificar_edo_cta(fecha_ini=fecha_i, 
+                                     fecha_fin=fecha_f).to_excel('partidas_por_identificar_edo_cta.xlsx')
+    print('Partidas por identificar libro:\n', partidas_por_identificar_libro(fecha_ini=fecha_i, 
+                                                                              fecha_fin=fecha_f).to_string())
+    partidas_por_identificar_libro(fecha_ini=fecha_i, 
+                                   fecha_fin=fecha_f).to_excel('partidas_por_identificar_libro.xlsx')

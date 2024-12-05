@@ -27,13 +27,13 @@ def sunburst_agrupa_facturacion(**kwargs):
     anio, mes, conv_usd = kwargs.get('anio', 'all'), kwargs.get('mes', 'all'), kwargs.get('usd', True)
     data_ing = agrupa_facturacion(get_data_facturacion_con_linea_art(anio=anio, mes=mes, usd=conv_usd))[['g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'es_detalle', 'monto']]
     data_ing_detalle = data_ing[(data_ing['es_detalle']==1) & (data_ing['monto']!=0.0)]
-    print(data_ing_detalle['monto'].sum())
-    print(data_ing_detalle.to_string())
+    #print(data_ing_detalle['monto'].sum())
+    #print(data_ing_detalle.to_string())
     # Crear un gráfico Sunburst con los datos
     fig = px.sunburst(data_ing_detalle, path=['g2', 'g3', 'g4', 'g5', 'g6'], values='monto', width=950, height=950) #color_continuous_scale="RdYlGn", color='sum_x_grupo'
     # Mostrar el gráfico
     fig.show()
     
-    
-# print(agrupa_facturacion(get_data_facturacion_con_linea_art(anio=2023, usd=True))[['co_base', 'descripcion_cod_base', 'monto', 'sum_x_grupo', 'porce_x_grupo', 'descripcion_grupo']].to_string())
-sunburst_agrupa_facturacion(anio=2024, mes=3, usd=False)    
+if __name__ == '__main__':    
+    # print(agrupa_facturacion(get_data_facturacion_con_linea_art(anio=2023, usd=True))[['co_base', 'descripcion_cod_base', 'monto', 'sum_x_grupo', 'porce_x_grupo', 'descripcion_grupo']].to_string())
+    sunburst_agrupa_facturacion(anio=2024, mes=11, usd=False)    
