@@ -17,7 +17,7 @@ def registrar_mov_ban_edo_cta():
     # m_row = sheet.max_row
     # max_col = sheet.max_column
     df_edo_cta2 = df_edo_cta.replace(nan, '')
-    df_edo_cta2['Contabilizar'] = df_edo_cta2['Contabilizar'].apply(lambda x: x.upper())
+    df_edo_cta2['Contabilizar'] = df_edo_cta2['Contabilizar'].str.upper()
     # edo_cta_sin_null = edo_cta_sin_null.query('Comentarios.str.contains("E/S") or Comentarios.str.contains("Botellon")')
     df_edo_cta2 = df_edo_cta2.query('Contabilizar.str.contains("SI")')
     for ind in df_edo_cta2.index:
@@ -48,7 +48,7 @@ def registrar_mov_ban_edo_cta():
         print('Archivo Cerrado.')
 
 #  Identifica y establece los movimientos pendientes del estado de cuenta en comprarción con los movimientos bancarios del mes
-def establecer_color_amarillo_mov_edo_cta_por_registrar_banesco():
+def establecer_color_amarillo_mov_edo_cta_por_registrar_banesco(fecha_ini):
     #  objecto color de fondo para la celda
     style_amarillo = PatternFill(patternType='solid', fgColor='FFFFB9')
     style_sin_color = PatternFill()
@@ -56,7 +56,7 @@ def establecer_color_amarillo_mov_edo_cta_por_registrar_banesco():
     df_edo_cta = df[df['Fecha'].notnull()].copy()  # FILTRAR VALORES NO NULOS
     df_edo_cta['Comentarios'] = df_edo_cta['Comentarios'].str[:50]
     wb_edo_cta = load_workbook(p_edo_cta_banesco)
-    mov_x_registrar = get_mov_edo_cta_pdtes_por_regist('2024-08-01')
+    mov_x_registrar = get_mov_edo_cta_pdtes_por_regist(fecha_ini)
     # Obtiene los movimientos por conciliar
     mov_pdtes = df_edo_cta[df_edo_cta['Referencia'].isin(mov_x_registrar)]
     # Obtiene los movimientos conciliados

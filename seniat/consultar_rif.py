@@ -21,7 +21,7 @@ def consultar_rif(rif):
     imagen = Image.open(BytesIO(response.content))
     # rif = input('ingrese el rif:')
     imagen.show()
-    cod_imagen = input('ingrese código de imagen:')
+    cod_imagen = input('ingrese código de imagen:').lower()
     # Cerrar el objeto BytesIO
     imagen.close()
     # Eliminar la referencia al objeto BytesIO
@@ -87,7 +87,7 @@ def consultar_rif(rif):
 
 
 if __name__ == '__main__' :
-    rif = VerificadorDigito('J407388347').get_rif()
+    rif = VerificadorDigito('J308252310').get_rif()
     no_existe = 'n/e'
     if rif != no_existe:
         pprint(consultar_rif(rif), sort_dicts=False)

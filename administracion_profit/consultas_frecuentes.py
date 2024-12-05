@@ -39,8 +39,8 @@ from seniat.consultar_rif import consultar_rif
 # -->ESTADO DE CUENTA
 # Registrar los movimientos bancarios seleccionados del estado de cuenta actual banesco
 # registrar_mov_ban_edo_cta()
-# print(mov_bcarios_pendientes_por_identif_en_edo_cta_banesco('2024-08-01').to_string())
-# establecer_color_amarillo_mov_edo_cta_por_registrar_banesco()
+# print(mov_bcarios_pendientes_por_identif_en_edo_cta_banesco('2024-11-01').to_string())
+# establecer_color_amarillo_mov_edo_cta_por_registrar_banesco('20241101')
 # get_edo_cta_bs_y_usd()  # Estado de cuenta banesco en $$$$$$$
 ## Muestra los resultados de las comisiones e IGTF a registrar manualmente
 # print(get_mov_igtf_comisiones().to_string())
@@ -52,12 +52,12 @@ from seniat.consultar_rif import consultar_rif
 
 # -->BANCO
 # Muestra los resultados de la busqueda en los movimientos bancarios
-# print(buscar_en_mov_de_banco(texto_a_buscar="adorn", anio='all', mes='all').to_string())
+# print(buscar_en_mov_de_banco(texto_a_buscar="Vicenta", anio='all', mes='all').to_string())
 
 
 # -->PROVEEDORES
 # print(buscar_en_proveedores('V133396426').reset_index(drop=True).to_string())  # Muestra los resultados de la busqueda en la tabla de PROVEEDORES
-print(buscar_en_compras(str_search='J501676690', anio='all').to_string())  # Muestra los resultados de la busqueda en las COMPRAS
+# print(buscar_en_compras(str_search='acceso', anio='all').to_string())  # Muestra los resultados de la busqueda en las COMPRAS
 # print(top_proveedores().to_string())  # TOP Facturación por proveedores
 
 # -->CLIENTES

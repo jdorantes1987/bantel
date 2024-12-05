@@ -117,17 +117,15 @@ def contabilizar_comprob_conatel(periodo, id_cbte, descrip_encab):
                                   hoy(),
                                   'NULL')
 
-
-# print(asiento_conatel((2024, 10)))
-
-# run
-# contabilizar_comisiones_e_igtf('2410013', '20241031', 'REG. COM. E INTER. BCARIOS OCTUBRE 2024 BANESCO')
-
-# run
-# contabilizar_comprob_manual_file_excel()
-
-# run
-# contabilizar_comprob_conatel((2024, 9), '2409018', 'PROV. CONATEL Y FONACIT NOV 2024')
+if __name__ == '__main__':
+   # print(asiento_conatel((2024, 10)))
+   # run
+   # contabilizar_comisiones_e_igtf('2411013', '20241130', 'REG. COM. E INTER. BCARIOS NOVIEMBRE 2024 BANESCO')   
+   # run
+   contabilizar_comprob_manual_file_excel()
+   
+   # run
+#    contabilizar_comprob_conatel((2024, 11), '2411018', 'PROV. CONATEL Y FONACIT NOV 2024')
 
 
 
