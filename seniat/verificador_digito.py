@@ -20,7 +20,7 @@ class VerificadorDigito():
             formula = 11 - ((tipo * 4 + int(doc[1:2]) * 3 + int(doc[2:3]) * 2 + int(doc[3:4]) * 7  \
                                         + int(doc[4:5]) * 6 + int(doc[5:6]) * 5 + int(doc[6:7]) * 4 \
                                         + int(doc[7:8]) * 3 + int(doc[8:9]) * 2) % 11)  
-            digito_verificador =  formula if (letra_rif == 'V' and formula <= 9) or (letra_rif in ['J', 'E']  and formula != 10) else 0
+            digito_verificador =  formula if (letra_rif == 'V' and formula <= 9) or (letra_rif in ['J', 'E']  and formula < 10) else 0
             rif =  doc + str(digito_verificador) if len(doc) == 9 else doc
             return rif if rif[-1] == str(digito_verificador) else 'Error en dígito verificador'
         else:
@@ -28,4 +28,4 @@ class VerificadorDigito():
                     
     
 if __name__ == '__main__':
-    print(VerificadorDigito('j003231282') .get_rif())
+    print(VerificadorDigito('J000792240') .get_rif())
