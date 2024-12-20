@@ -1,3 +1,9 @@
+x=1
+def prueba_variables(x=1, y=10):
+    primero = x
+    segundo = y
+
+
 def suma(a, b,  c,  / , d, e,  *, f,  g):
     return a+b+c+d+e+f+g
 
@@ -14,10 +20,24 @@ diccionario = {7: 'siete', 8: 'ocho', 9: 'nueve'}
 
 print(sumar(*lista, *tupla, *diccionario))
 
-def fun(**kwargs):
-       print(kwargs)
-       suma = sum(kwargs.values())
-       print(suma)
+print(suma.__code__.co_varnames)
 
-fun(a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8, i=9)
+def fun(a, L=None):
+    if L is None:
+       L=[]
+    L.append(a)
+    print(L)
+
+
+print(f"Defaults : ", fun.__defaults__)    
+fun(1)
+print(f"Defaults : ", fun.__defaults__)    
+fun(98)
+print(f"Defaults : ", fun.__defaults__)    
+fun(0, L=[1, 2, 8])
+
+
+
+
+
 
