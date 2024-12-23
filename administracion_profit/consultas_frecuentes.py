@@ -99,8 +99,10 @@ from seniat.consultar_rif import consultar_rif
 # print(top_proveedores().to_string())  # TOP Facturación por proveedores
 
 # # -->CLIENTES
-# patron = r"[A-Za-z]{2}\d{1,3}-\d{1,3}"  # Expresión regular para ubicar los clientes AGRUPADOS que tiene guion (-) ejemplo: CL39-4
-# patron2 = r"[A-Za-z]{2}\d{1,3}$"  # Expresión regular para ubicar los clientes NO AGRUPADOS ejemplo: CL95 sin el guion
+# # Expresión regular para ubicar los clientes AGRUPADOS que tiene guion (-) ejemplo: CL39-4
+# patron = r"[A-Za-z]{2}\d{1,3}-\d{1,3}"
+# # Expresión regular para ubicar los clientes NO AGRUPADOS ejemplo: CL95 sin el guion
+# patron2 = r"[A-Za-z]{2}\d{1,3}$"
 # patron3 = (
 #     r"^414\d{7}$"  # Expresión regular para números de teléfono que comienzan con 414
 # )
@@ -113,9 +115,9 @@ from seniat.consultar_rif import consultar_rif
 #     .to_string()
 # )  # Muestra los resultados de la busqueda en las VENTAS
 # print(top_clientes(anio=2024, top=5).to_string())  # TOP Facturación por cliente
-# print(
-#     variacion_tasa_en_cobros(anio=2024).to_string()
-# )  # Listado de facturacion del mes con la variación en la tasa en USD "Ojo solo hace la comparación de la base imponible de la factura"
+# # Listado de facturacion del mes con la variación en la tasa en USD
+# # "Ojo solo hace la comparación de la base imponible de la factura"
+# print(variacion_tasa_en_cobros(anio=2024).to_string())
 # print(
 #     variacion_tasa_en_cobros_por_mes(anio=2023)
 # )  # Resumen de facturacion del mes con la variación en la tasa en USD
@@ -133,20 +135,19 @@ from seniat.consultar_rif import consultar_rif
 #     facturas_cobradas_res(anio=2024, usd=False).to_string()
 # )  # FACTURAS COBRADAS resumido
 # facturas_cobradas_res(anio="all", usd=False).to_excel("cobros_por_clientes.xlsx")
-# print(
-#     diccionario_facturacion(anio=2021, mes=1, conv_usd=True)
-# )  # Diccionario que devuelve de manera INDIVIDUAL el total base imponible en BS o USD de la FACTURACIÓN por AÑO y MES
-# print(
-#     diccionario_facturacion_total_por_anio(anio=2021, conv_usd=True)
-# )  # Diccionario que devuelve de manera INDIVIDUAL el total base imponible en BS o USD de la FACTURACIÓN por AÑO
+# # Diccionario que devuelve de manera INDIVIDUAL
+# # el total base imponible en BS o USD de la FACTURACIÓN por AÑO y MES
+# print(diccionario_facturacion(anio=2021, mes=1, conv_usd=True))
+# # Diccionario que devuelve de manera INDIVIDUAL
+# # el total base imponible en BS o USD de la FACTURACIÓN por AÑO
+# print(diccionario_facturacion_total_por_anio(anio=2021, conv_usd=True))
+# # DETALLE de FACTUTACIÓN archivo Excel
 # factura_venta_con_su_detalle_en_usd(anio=2023, usd=True).to_excel(
 #     "Facturacion en Bs y Usd al 31-12-2024.xlsx"
-# )  # DETALLE de FACTUTACIÓN archivo Excel
-# print(
-#     facturacion_x_anio(usd=True).to_string()
-# )  # obtiene el TOTAL BASE IMPONIBLE en BS o $ de la FACTURACIÓN por AÑO y MES
+# )
+# # obtiene el TOTAL BASE IMPONIBLE en BS o $ de la FACTURACIÓN por AÑO y MES
+# print(facturacion_x_anio(usd=True).to_string())
 # graf_calor_ventas(usd=False)  # GRÁFICO facturación
-
 
 # # -->SENIAT
 # print(consultar_rif("V125639476"))
