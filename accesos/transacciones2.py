@@ -1,9 +1,10 @@
 # from  accesos.conexion_mkwsp import ConexionBDMysql
 
+
 class GestorTransacciones2:
     def __init__(self, conexion_db):
         self.conexion = conexion_db
-        
+
     def iniciar_transaccion(self):
         self.conexion.conn.autocommit = False
 
@@ -14,14 +15,15 @@ class GestorTransacciones2:
     def revertir_transaccion(self):
         self.conexion.conn.rollback()
         self.conexion.conn.autocommit = True
-        
+
     def get_cursor(self):
         try:
             cursor = self.conexion.conn.cursor()
         except Exception as e:
             print("Error al crear cursor: ", e)
         return cursor
-        
+
+
 ##  Ejemplo de uso:
 # conexion = ConexionBDMysql() #  Crea un objeto conexión
 # conexion.conectar()  # inicia la conexión
@@ -40,7 +42,7 @@ class GestorTransacciones2:
 #     gestor.revertir_transaccion()
 #     print(f"Error en la transacción: {e}")
 # finally:
-#     conexion.desconectar()       
+#     conexion.desconectar()
 
 # print('Listo')
 # print(conexion.get_read_sql('select * from usuarios'))

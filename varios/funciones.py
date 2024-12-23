@@ -4,8 +4,8 @@ import pandas as pd
 pagos = pd.read_excel("./varios/RepFormatoPago.xlsx")
 
 print(pagos.info())
-duplicados = pagos[pagos['mont_doc'].duplicated(keep=False)==True]
-print('All duplicados por columna:\n', duplicados['mont_doc'].count())
+duplicados = pagos[pagos["mont_doc"].duplicated(keep=False) == True]
+print("All duplicados por columna:\n", duplicados["mont_doc"].count())
 
 
 # print('\n' * 2,

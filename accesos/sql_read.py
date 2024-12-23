@@ -1,10 +1,10 @@
-from pandas import DataFrame
-from pandas import read_sql_query
-from pandas import NA
+from pandas import NA, DataFrame, read_sql_query
 from sqlalchemy import text
+
 from accesos.conexion import ConexionBD
 
-def get_read_sql(sql, **kwargs) -> DataFrame:  
+
+def get_read_sql(sql, **kwargs) -> DataFrame:
     try:
         conex = ConexionBD(**kwargs)
         engine = conex.c_engine()

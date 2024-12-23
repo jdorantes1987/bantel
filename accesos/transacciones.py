@@ -1,10 +1,11 @@
 import accesos.conexion as cnn
 
+
 class GestorTransacciones:
-    #  Se le pasa como parámetro un objeto conexión 
+    #  Se le pasa como parámetro un objeto conexión
     def __init__(self, conexion_db):
         self.conexion = conexion_db
-        
+
     def iniciar_transaccion(self):
         self.conexion.conn.autocommit = False
 
@@ -15,14 +16,14 @@ class GestorTransacciones:
     def revertir_transaccion(self):
         self.conexion.conn.rollback()
         self.conexion.conn.autocommit = True
-        
+
     def get_cursor(self):
         try:
             cursor = self.conexion.conn.cursor()
         except Exception as e:
             print("Error al crear cursor: ", e)
         return cursor
-        
+
 
 ## Ejemplo de uso:
 # conexion = cnn.ConexionBD(host='10.22.22.3') #  Crea un objeto conexión
@@ -43,5 +44,5 @@ class GestorTransacciones:
 #     print(f"Error en la transacción: {e}")
 # finally:
 #     conexion.desconectar()
-    
+
 # print('Listo')
