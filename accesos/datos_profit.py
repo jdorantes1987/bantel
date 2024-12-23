@@ -77,17 +77,15 @@ class datos_profit:
         return df
 
     def articulos_profit(self):
-        sql = """
-            Select RTRIM(co_art) as co_art, fecha_reg, art_des, tipo_imp, tipo, anulado, fecha_inac, co_lin, co_subl, co_cat, co_color 
-            co_ubicacion, cod_proc, item, modelo, ref, comentario, dis_cen, RTRIM(campo1) as campo1, campo2, campo3, campo4, 
-            campo5, campo6, campo7, campo8, co_us_in, co_sucu_in, fe_us_in, co_us_mo, co_sucu_mo, fe_us_mo 
-            FROM saArticulo
-            """
+        sql = """ Select RTRIM(co_art) as co_art, fecha_reg, art_des, tipo_imp, tipo, anulado, fecha_inac, co_lin, co_subl, co_cat, co_color
+            co_ubicacion, cod_proc, item, modelo, ref, comentario, dis_cen, RTRIM(campo1) as campo1, campo2, campo3, campo4,
+            campo5, campo6, campo7, campo8, co_us_in, co_sucu_in, fe_us_in, co_us_mo, co_sucu_mo, fe_us_mo
+            FROM saArticulo """
         return get_read_sql(sql, **self.dict_con_admin)
 
     def data_ventas_con_detalle(self, **kwargs):
         anio, mes = kwargs.get("anio"), kwargs.get("mes")
-        where_anio = f"" if anio == "all" else f" AND year(fact.fec_reg)='{anio}'"
+        where_anio = "" if anio == "all" else f" AND year(fact.fec_reg)='{anio}'"
         where_all = "WHERE fact.[anulado]=0 " + where_anio
         where_mes = f"WHERE fact.[anulado]=0 AND year(fact.fec_reg)='{anio}' and month(fact.fec_reg)='{mes}'"
         where = where_all if mes == "all" else where_mes
@@ -98,11 +96,11 @@ class datos_profit:
                     c.cli_des, (v.ven_des + iif(v.campo1 <> '', + ' -> ' + v.campo1, '')) as ven_des, (dfact.reng_neto-dfact.monto_desc_glob) AS monto_base_item,
                     (dfact.monto_imp+dfact.monto_imp_afec_glob) as iva,
                     ((dfact.reng_neto-dfact.monto_desc_glob)+(dfact.monto_imp+dfact.monto_imp_afec_glob)) as total_item,
-                    iif(reng_num=1, fact.otros1, 0) as igtf, fact.saldo as saldo_total_doc 
+                    iif(reng_num=1, fact.otros1, 0) as igtf, fact.saldo as saldo_total_doc
             FROM saFacturaVenta AS fact INNER JOIN saFacturaVentaReng AS dfact ON
                     fact.doc_num = dfact.doc_num LEFT JOIN saArticulo AS art ON
-                    dfact.co_art = art.co_art LEFT JOIN saCliente AS c ON fact.co_cli = c.co_cli LEFT JOIN saVendedor as v ON fact.co_ven = v.co_ven  
-            {where} 
+                    dfact.co_art = art.co_art LEFT JOIN saCliente AS c ON fact.co_cli = c.co_cli LEFT JOIN saVendedor as v ON fact.co_ven = v.co_ven
+            {where}
             ORDER BY fact.fec_reg, fact.doc_num
             """
         fact_det = get_read_sql(sql, **self.dict_con_admin)
@@ -132,15 +130,15 @@ class datos_profit:
             "saldo_total_doc",
         ]
         anio, mes = kwargs.get("anio"), kwargs.get("mes")
-        where_anio = f"" if anio == "all" else f"AND year(docv.fec_reg)='{anio}'"
-        where_all = "WHERE docv.co_tipo_doc='N/CR' AND docv.anulado=0 " + where_anio
+        where_anio = "" if anio == "all" else f"AND year(docv.fec_reg)='{anio}'"
+        where_all = f"WHERE docv.co_tipo_doc='N/CR' AND docv.anulado=0 {where_anio}"
         where_mes = f"WHERE docv.co_tipo_doc='N/CR' AND docv.anulado=0 AND year(docv.fec_reg)='{anio}' and month(docv.fec_reg)='{mes}'"
         where = where_all if mes == "all" else where_mes
 
         sql = f"""
-            SELECT 1 as reng_num, RTRIM(docv.nro_doc) as doc_num, RTRIM(docv.co_tipo_doc) as co_tipo_doc, observa as descrip, docv.dis_cen, docv.fec_emis, 
-                    docv.fec_reg, year(docv.fec_reg) AS anio, month(docv.fec_reg) AS mes, RTRIM(docv.co_ven) as co_ven, 
-                    RTRIM(docv.co_cli) as co_cli, c.cli_des, (v.ven_des + iif(v.campo1 <> '', + ' -> ' + v.campo1, '')) as ven_des, 
+            SELECT 1 as reng_num, RTRIM(docv.nro_doc) as doc_num, RTRIM(docv.co_tipo_doc) as co_tipo_doc, observa as descrip, docv.dis_cen, docv.fec_emis,
+                    docv.fec_reg, year(docv.fec_reg) AS anio, month(docv.fec_reg) AS mes, RTRIM(docv.co_ven) as co_ven,
+                    RTRIM(docv.co_cli) as co_cli, c.cli_des, (v.ven_des + iif(v.campo1 <> '', + ' -> ' + v.campo1, '')) as ven_des,
                     -docv.total_bruto as monto_base_item, -docv.monto_imp as iva,
                     -(docv.total_neto-docv.otros1) as total_item, -docv.otros1 as igtf,  -docv.saldo as saldo_total_doc
             FROM saDocumentoVenta AS docv LEFT JOIN saCliente AS c ON docv.co_cli = c.co_cli LEFT JOIN saVendedor as v ON docv.co_ven = v.co_ven
@@ -190,7 +188,7 @@ class datos_profit:
         fact_detalle = self.data_ventas_con_detalle(anio=anio, mes=mes)
         notas_de_cre = self.data_notas_credito(anio=anio, mes=mes)
         # verifica que existan notas de crédito antes de hacer la concatenación
-        if notas_de_cre.empty != True:
+        if notas_de_cre.empty is not True:
             fact_detalle_total = concat(
                 [fact_detalle, notas_de_cre], axis=0, ignore_index=True
             )
@@ -305,14 +303,14 @@ class datos_profit:
         where = where_all if mes == "all" else where_mes
         sql = (
             """
-                SELECT RTRIM(d.nro_doc) AS nro_doc, RTRIM(d.co_cli) AS co_cli, cl.cli_des, d.fec_reg as f_reg_doc, 
-                    cb.fecha AS f_cobro, RTRIM(dcb.cob_num) AS cob_num, fp.forma_pag, RTRIM(fp.cod_cta) as cod_cta, RTRIM(fp.cod_caja) as cod_caja, 
+                SELECT RTRIM(d.nro_doc) AS nro_doc, RTRIM(d.co_cli) AS co_cli, cl.cli_des, d.fec_reg as f_reg_doc,
+                    cb.fecha AS f_cobro, RTRIM(dcb.cob_num) AS cob_num, fp.forma_pag, RTRIM(fp.cod_cta) as cod_cta, RTRIM(fp.cod_caja) as cod_caja,
                     (d.total_bruto-d.monto_desc_glob) as m_base, dcb.mont_cob as mont_cob_dc, d.total_neto AS total_doc,
                     Round(dcb.mont_cob/d.total_neto,6) AS porc_cobrado
                 FROM (((saDocumentoVenta AS d LEFT JOIN saCobroDocReng AS dcb ON d.nro_doc = dcb.nro_doc)
                     LEFT JOIN saCobroTPReng AS fp ON dcb.cob_num = fp.cob_num)
                     LEFT JOIN saCobro AS cb ON dcb.cob_num = cb.cob_num)
-                    INNER JOIN saCliente AS cl ON d.co_cli = cl.co_cli 
+                    INNER JOIN saCliente AS cl ON d.co_cli = cl.co_cli
             """
             + where
         )
@@ -471,23 +469,14 @@ class datos_profit:
             ascending=[False, False, False, False],
         ).reset_index()
 
-    def articulos_profit(self):
-        sql = """
-                Select RTRIM(co_art) as co_art, art_des, campo1, anulado, dis_cen, tipo_imp 
-                from saArticulo
-            """
-        df = get_read_sql(sql, **self.dict_con_admin)
-        return DataFrame(df)
-
     def rep_cobros_x_cliente(self):
         sql = """
-                Select 
-                    RTRIM(ctpr.cob_num) as cob_num, RTRIM(cb.co_cli) as co_cli, c.cli_des, 
-                    cb.fecha as fecha_cob, mont_doc, RTRIM(ctpr.forma_pag) as forma_pag, 
-                    RTRIM(ctpr.co_ban) as co_ban, RTRIM(ctpr.cod_caja) as cod_caja, ctpr.fecha_che 
-                From 
-                    saCobroTPReng as ctpr LEFT JOIN saCobro as cb ON ctpr.cob_num = cb.cob_num 
-                    LEFT JOIN saCliente as c ON cb.co_cli = RTRIM(c.co_cli) 
+                Select
+                    RTRIM(ctpr.cob_num) as cob_num, RTRIM(cb.co_cli) as co_cli, c.cli_des,
+                    cb.fecha as fecha_cob, mont_doc, RTRIM(ctpr.forma_pag) as forma_pag,
+                    RTRIM(ctpr.co_ban) as co_ban, RTRIM(ctpr.cod_caja) as cod_caja, ctpr.fecha_che
+                    From saCobroTPReng as ctpr LEFT JOIN saCobro as cb ON ctpr.cob_num = cb.cob_num
+                    LEFT JOIN saCliente as c ON cb.co_cli = RTRIM(c.co_cli)
                 Where c.inactivo = 'FALSE'
             """
         df = get_read_sql(sql, **self.dict_con_admin)
@@ -522,10 +511,10 @@ class datos_profit:
     def get_movbanco(self, fecha_inicio_mes):
         fecha_ini = fecha_inicio_mes
         fecha_final = ultimo_dia_mes(to_datetime(fecha_inicio_mes))
-        sql = f"""SELECT mov_num, descrip, cod_cta, co_cta_ingr_egr, fecha, doc_num, monto_d, monto_h, idb, cob_pag, 
-                        anulado, co_us_in, fe_us_in, co_us_mo, fe_us_mo 
-                FROM saMovimientoBanco 
-                WHERE fecha>='{fecha_ini}' AND fecha<='{fecha_final}'
+        sql = f"""SELECT mov_num, descrip, cod_cta, co_cta_ingr_egr, fecha, doc_num, monto_d, monto_h, idb, cob_pag,
+                     anulado, co_us_in, fe_us_in, co_us_mo, fe_us_mo
+                  FROM saMovimientoBanco
+                  WHERE fecha>='{fecha_ini}' AND fecha<='{fecha_final}'
             """
         return get_read_sql(sql, **self.dict_con_admin)
 
@@ -549,14 +538,15 @@ class datos_profit:
             "USD",
         ]
 
-        where_anio = f"" if anio == "all" else f"WHERE year(fecha)='{anio}'"
-        where_all = f"" + where_anio
+        where_anio = "" if anio == "all" else f"WHERE year(fecha)='{anio}'"
+        where_all = "" + where_anio
         where_mes = f"WHERE year(fecha)='{anio}' and month(fecha)='{mes}'"
         where = where_all if mes == "all" else where_mes
 
         sql = f"""
-            SELECT RTRIM(mov_num) as mov_num, descrip, cod_cta, RTRIM(co_cta_ingr_egr) as co_cta_ingr_egr, fecha, doc_num, monto_d, monto_h, idb, cob_pag, anulado, 
-                    campo1, campo2, campo3, campo4, campo5, campo6, campo7, co_us_in, fe_us_in, co_us_mo, fe_us_mo       
+            SELECT RTRIM(mov_num) as mov_num, descrip, cod_cta, RTRIM(co_cta_ingr_egr) as co_cta_ingr_egr, fecha,
+            doc_num, monto_d, monto_h, idb, cob_pag, anulado, campo1, campo2, campo3, campo4, campo5, campo6,
+            campo7, co_us_in, fe_us_in, co_us_mo, fe_us_mo
             FROM saMovimientoBanco
             {where}
             """
@@ -617,25 +607,25 @@ class datos_profit:
 
     def clientes(self):
         sql = """
-            SELECT RTRIM(co_cli) as co_cli, RTRIM(cli_des) as cli_des, direc1, direc2, dir_ent2, telefonos, fax, respons, fecha_reg, 
-                    plaz_pag, rif, email, tipo_per, ciudad, zip, website, contribu_e, porc_esp, horar_caja, inactivo, co_us_in, fe_us_in,
-                    co_us_mo, fe_us_mo, campo3, RTRIM(matriz) as matriz 
-            FROM saCliente 
+            SELECT RTRIM(co_cli) as co_cli, RTRIM(cli_des) as cli_des, direc1, direc2, dir_ent2, telefonos,
+                   fax, respons, fecha_reg, plaz_pag, rif, email, tipo_per, ciudad, zip, website, contribu_e,
+                   porc_esp, horar_caja, inactivo, co_us_in, fe_us_in, co_us_mo, fe_us_mo, campo3, RTRIM(matriz) as matriz
+                   FROM saCliente
             """
         return get_read_sql(sql, **self.dict_con_admin)
 
     def vendedores(self):
         sql = """
-            SELECT co_ven, RTRIM(ven_des) as ven_des, campo1  
-            FROM saVendedor 
+            SELECT co_ven, RTRIM(ven_des) as ven_des, campo1
+            FROM saVendedor
             """
         return get_read_sql(sql, **self.dict_con_admin)
 
     def proveedores(self):
         sql = """
             SELECT  RTRIM(co_prov) as co_prov, RTRIM(prov_des) as prov_des, direc1, direc2, telefonos, fax,
-                    respons, fecha_reg, plaz_pag, rif, email, tipo_per, ciudad, zip, website, contribu_e, porc_esp, 
-                    co_us_in, fe_us_in, co_us_mo, fe_us_mo 
+            respons, fecha_reg, plaz_pag, rif, email, tipo_per, ciudad, zip, website, contribu_e, porc_esp,
+            co_us_in, fe_us_in, co_us_mo, fe_us_mo
             FROM saProveedor
             """
         return get_read_sql(sql, **self.dict_con_admin)
@@ -722,9 +712,7 @@ class datos_profit:
         facturas["fec_emis"] = to_datetime(
             facturas["fec_emis"]
         ).dt.normalize()  # fecha sin hora, minutos y segundos
-        resul = search_df(
-            text_to_search, facturas
-        )  #  buscar texto dentro de la facturacion
+        resul = search_df(text_to_search, facturas)
         resul_sor = resul.sort_values(
             by=["fec_emis"], ascending=[True]
         )  # se debe ordenar el df para poder conbinar
@@ -791,7 +779,7 @@ class datos_profit:
 
     def factura_compra_con_su_detalle(self, **kwargs):
         anio, mes = kwargs.get("anio", "2023"), kwargs.get("mes", "all")
-        where_anio = f"" if anio == "all" else f" AND year(fact.fec_reg)='{anio}'"
+        where_anio = "" if anio == "all" else f" AND year(fact.fec_reg)='{anio}'"
         where_all = "WHERE fact.[anulado]=0 " + where_anio
         where_mes = f"WHERE fact.[anulado]=0 AND year(fact.fec_reg)='{anio}' and month(fact.fec_reg)='{mes}'"
         where = where_all if mes == "all" else where_mes
@@ -805,9 +793,8 @@ class datos_profit:
                     fact.otros1 as igtf, fact.saldo as saldo_total_doc
             FROM saFacturaCompra AS fact INNER JOIN saFacturaCompraReng AS dfact ON
                     fact.doc_num = dfact.doc_num LEFT JOIN saArticulo AS art ON
-                    dfact.co_art = art.co_art LEFT JOIN saProveedor AS c ON fact.co_prov = c.co_prov 
-            {where} 
-            ORDER BY fact.fec_reg, fact.doc_num
+                    dfact.co_art = art.co_art LEFT JOIN saProveedor AS c ON fact.co_prov = c.co_prov {where}
+                    ORDER BY fact.fec_reg, fact.doc_num
             """
         fact_det = get_read_sql(sql, **self.dict_con_admin)
         fact_det["co_tipo_doc"] = "FACT"
@@ -816,9 +803,9 @@ class datos_profit:
     def get_last__nro_fact_venta(self):
         sql = """
                 SELECT RTRIM(doc_num) as doc_num, RTRIM(n_control) as n_control
-                FROM saFacturaVenta 
-                WHERE doc_num in (SELECT MAX(RTRIM(doc_num)) 
-                                FROM saFacturaVenta)
+                FROM saFacturaVenta
+                WHERE doc_num in (SELECT MAX(RTRIM(doc_num))
+                                  FROM saFacturaVenta)
             """
         return get_read_sql(sql, **self.dict_con_admin)
 

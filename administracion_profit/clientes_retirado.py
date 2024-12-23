@@ -1,6 +1,5 @@
 import datetime
 
-import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.text import OffsetFrom
 from pandas import merge, to_datetime
@@ -48,7 +47,7 @@ def clientes_retirados():
             "inactivo",
         ]
     ]
-    clientes_inactivos = merge_fact2[merge_fact2["inactivo"] == True].copy()
+    clientes_inactivos = merge_fact2[merge_fact2["inactivo"] is True].copy()
     clientes_inactivos["monto_base_item$"] = round(
         clientes_inactivos["monto_base_item$"], 2
     )

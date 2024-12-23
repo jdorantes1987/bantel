@@ -25,7 +25,9 @@ def conexion(**kwargs):
     pword = kwargs.get("pword", args["pword"])
     driver_con = kwargs.get("proveedor", args["proveedor"])
     con_str = (
-        f"DRIVER={driver_con};SERVER={serv};DATABASE={data_base};UID={user};PWD={pword}"
+        f"DRIVER={driver_con};SERVER={serv};DATABASE={data_base};UID={user};"
+        f"PWD={pword}"
+        ""
     )
     connection_url = URL.create(diver, query={tipo_con: con_str})
     return create_engine(connection_url)
@@ -49,8 +51,9 @@ def insert_sql(strsql, **kwargs):
     data_b = kwargs.get("base_de_datos", args["base_de_datos"])
     usuario = args["usuario"]
     pword = args["pword"]
-    str_conn = "DRIVER={prov};SERVER={host};DATABASE={db};UID={user};PWD={pw}".format(
-        prov=proveedor, host=serv, db=data_b, user=usuario, pw=pword
+    str_conn = (
+        f"DRIVER={proveedor};SERVER={serv};DATABASE={data_b};UID={usuario};"
+        f"PWD={pword}"
     )
     conn = connect(str_conn)
     try:

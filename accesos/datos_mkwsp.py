@@ -17,9 +17,7 @@ class DatosMikrowisp:
 
     def clientes_aviso_user(self):
         self.oconn.conectar()
-        sql = """SELECT u.id, u.nombre, u.codigo_cliente, avi.id, z.zona 
-                     FROM usuarios AS u INNER JOIN (zonas AS z INNER JOIN tblavisouser AS avi ON z.id = avi.zona) ON u.id = avi.cliente
-                  """
+        sql = "SELECT u.id, u.nombre, u.codigo_cliente, avi.id, z.zona FROM usuarios AS u INNER JOIN (zonas AS z INNER JOIN tblavisouser AS avi ON z.id = avi.zona) ON u.id = avi.cliente"
         return self.oconn.get_read_sql(sql)
 
 
