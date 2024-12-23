@@ -6,4 +6,3 @@ class Persona:
         self.__edad = edad
         self.__telefono = telefono
         self.__direccion = direccion
-

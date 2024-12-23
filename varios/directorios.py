@@ -28,14 +28,13 @@ Veamos cómo funciona esto con un ejemplo:
 import os
 
 # print the current working directory
-print('Original working directory:', os.getcwd())
+print("Original working directory:", os.getcwd())
 
 # change the working directory
-os.chdir('/path/to/directory')
+os.chdir("/path/to/directory")
 
 # print the updated working directory
-print('Updated working directory:', os.getcwd())
+print("Updated working directory:", os.getcwd())
 
 # now you can import your module
 # import your_module
-

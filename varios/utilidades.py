@@ -1,8 +1,11 @@
-import datetime
 import calendar
+import datetime
 from re import findall
+
+
 def cnn_str_sql_server_admin():
     return "DRIVER={SQL Server};SERVER=10.100.104.11;DATABASE=BANTEL_A;UID=profit;PWD=profit"
+
 
 def search_df(regex: str, df, case=False):
     # Search all the text columns of `df`, return rows with any matches.
@@ -13,17 +16,21 @@ def search_df(regex: str, df, case=False):
         ).any(axis=1)
     ]
 
+
 #  Devuelve la fecha final del mes según la fecha indicada en el parámetro
 def last_date_of_month(any_date):
     # El dia 28 existe en todos los meses. 4 días después, siempre es el próximo mes
     next_month = any_date.replace(day=28) + datetime.timedelta(days=4)
     # restando el número del día actual nos devuelve un mes
     return next_month - datetime.timedelta(days=next_month.day)
+
+
 def ultimo_dia_mes(fecha):
     year = fecha.year
     mes = fecha.month
     rng = calendar.monthrange(year, mes)
     return datetime.datetime(year, mes, rng[1])
+
 
 def date_today():
     hoy = datetime.datetime.now()

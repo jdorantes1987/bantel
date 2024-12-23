@@ -1,26 +1,36 @@
 import pandas as pd
+
 serpList = ["Boa", "Pitón", "Culebra venenosa", "Víbora Rayada"]
 serpList2 = list(("Boa", "Pitón", "Culebra venenosa", "Víbora Rayada"))
-serpList3 = {"Boa": "Serpiente Constrictora", "Pitón": "Serpiente Constrictora", "Cobra": "Culebra venenosa", "Víbora Rayada" : "Culebra Inofensiva"}
+serpList3 = {
+    "Boa": "Serpiente Constrictora",
+    "Pitón": "Serpiente Constrictora",
+    "Cobra": "Culebra venenosa",
+    "Víbora Rayada": "Culebra Inofensiva",
+}
 print(type(serpList2))
 print(type(serpList3))
-serpList4 = [{"Boa", "Pitón", "Víbora Rayada"}, {"Serpiente ConstrictoraA", "Serpiente ConstrictoraB", "Culebra Inofensiva"}, "Serps y sus niveles de riesgo" ]
+serpList4 = [
+    {"Boa", "Pitón", "Víbora Rayada"},
+    {"Serpiente ConstrictoraA", "Serpiente ConstrictoraB", "Culebra Inofensiva"},
+    "Serps y sus niveles de riesgo",
+]
 
-print('Indice')
+print("Indice")
 print(serpList4[0:2])
 
-mi_lista = ['Juan', 'Pedro', 'Laura', 'Carmen', 'Susana']
-print(mi_lista[0]) # Muestra Juan (la primera posición es la 0)
-print(mi_lista[-1]) # Muestra Susana
-print(mi_lista[1]) # Muestra Pedro
-print(mi_lista[2]) # Muestra Laura
-print(mi_lista[-2]) # Muestra Carmen
+mi_lista = ["Juan", "Pedro", "Laura", "Carmen", "Susana"]
+print(mi_lista[0])  # Muestra Juan (la primera posición es la 0)
+print(mi_lista[-1])  # Muestra Susana
+print(mi_lista[1])  # Muestra Pedro
+print(mi_lista[2])  # Muestra Laura
+print(mi_lista[-2])  # Muestra Carmen
 
 
 edades = [20, 41, 6, 18, 23]
 # Si queremos agregar nuevos elementos en una lista debemos usar extend en vez de append
 edades.extend([60, 80, 90])
-print('ejemplo extend')
+print("ejemplo extend")
 print(edades)
 # Recorriendo los elementos
 for edad in edades:
@@ -57,7 +67,7 @@ print(números)
 
 # Removiendo un elemento de una lista con pop() en Python
 
-palabras = ['hola', 'hello', 'ola']
+palabras = ["hola", "hello", "ola"]
 
 palabras.pop(1)
 
@@ -65,10 +75,10 @@ print(palabras)
 # Mostrará ['hola', 'ola']
 
 # Removiendo un elemento de una lista con remove() en Python
-palabras = ['hola', 'hello', 'hello moto', 'ola']
+palabras = ["hola", "hello", "hello moto", "ola"]
 
 
-palabras.remove('hello')
+palabras.remove("hello")
 
 print(palabras)
 # Mostrará ['hola', 'hello', 'ola']

@@ -1,5 +1,6 @@
-import facturas as fact
 import plotly.figure_factory as ff
+
+import administracion_profit.facturas as fact
 import varios.zoho as zh
 
 # *******Datos de DECLARACION DE IMPUESTOS*******
@@ -19,5 +20,3 @@ fact.ajustes_man_compras_sin_cta_contable()
 fact.ajustes_aut_compras_sin_cta_contable()
 fact.ajustes_man_ventas_sin_cta_contable()
 fact.ajustes_aut_ventas_sin_cta_contable()
-
-
