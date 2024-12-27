@@ -8,4 +8,3 @@ print(queue.popleft())
 
 texto = "hola mundo"
 print(dir(texto))
-largo = len(texto)
