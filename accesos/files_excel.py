@@ -1,5 +1,3 @@
-from sys import path
-
 from pandas import read_excel, to_datetime
 
 p_data_estadisticas_bcv = "../bantel/accesos/excel/tasas_BCV.xlsx"  # ruta relativa, regresa a la carpeta anterior
