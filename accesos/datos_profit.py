@@ -12,6 +12,7 @@ from pandas import (
     options,
     pivot_table,
     to_datetime,
+    MultiIndex,
 )
 
 from accesos.files_excel import datos_estadisticas_tasas as p_est_bcv
@@ -864,8 +865,9 @@ class datos_profit:
             columns=["anio", "mes"],
             aggfunc="sum",
             margins=True,
+            fill_value=0.0,
             sort=False,
-        ).replace(nan, 0)
+        )
 
     #  Facturas de ventas parcialmente cobradas o sin cobro
     def cxc_clientes_resum_grouped(self, **kwargs):
@@ -959,6 +961,9 @@ class datos_profit:
         return df
 
 
-# Ejemplo de uso:
-# pcta = datos_profit(host='10.100.104.11', data_base_admin='BANTEL_I',  data_base_cont='TBANTEL_C')
-# print(pcta.dicc_ventas_total_por_anio_vendedor(anio=2024, vendedor='0005'))
+if __name__ == "__main__":
+    datos_profit = datos_profit(
+        host="10.100.104.11", data_base_admin="BANTEL_I", data_base_cont="TBANTEL_C"
+    )
+    data = datos_profit.cxc_clientes_resum_pivot()
+    print(data)

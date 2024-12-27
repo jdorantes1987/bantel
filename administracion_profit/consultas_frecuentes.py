@@ -1,58 +1,63 @@
-from accesos.datos import factura_venta_con_su_detalle_en_usd, facturacion_x_anio
-from accesos.datos import search_in_compras as buscar_en_compras
-from accesos.datos import search_in_movbanco as buscar_en_mov_de_banco
-from accesos.datos import search_in_ventas as buscar_en_ventas
-from accesos.datos import variacion_tasa_en_cobros, variacion_tasa_en_cobros_por_mes
-from administracion_profit.clientes import get_top_fact_x_cliente as top_clientes
-from administracion_profit.clientes import new_cod_client
-from administracion_profit.clientes import search_clients as buscar_en_client
-from administracion_profit.edo_cta import (
-    get_edo_cta_bs_y_usd,
-    read_data_estados_de_cuenta,
-)
-from administracion_profit.edo_cta_registrar_mov import (
-    establecer_color_amarillo_mov_edo_cta_por_registrar_banesco,
-    mov_bcarios_pendientes_por_identif_en_edo_cta_banesco,
-    registrar_mov_ban_edo_cta,
-)
-from administracion_profit.facturas import (
-    diccionario_facturacion,
-    diccionario_facturacion_total_por_anio,
-)
-from administracion_profit.facturas import (
-    facturacion_saldo_x_clientes_detallado as facturas_con_saldo_det,
-)
-from administracion_profit.facturas import (
-    facturacion_saldo_x_clientes_resumen as facturas_con_saldo_res,
-)
-from administracion_profit.facturas import (
-    facturas_cobradas_x_clientes_detallado as facturas_cobradas_det,
-)
-from administracion_profit.facturas import (
-    facturas_cobradas_x_clientes_resumen as facturas_cobradas_res,
-)
-from administracion_profit.facturas import graf_calor_ventas
-from administracion_profit.obtener_igtf_y_comisiones import get_mov_igtf_comisiones
-from administracion_profit.proveedores import get_top_compras_x_prov as top_proveedores
-from administracion_profit.proveedores import search_prov as buscar_en_proveedores
-from banco_central.bcv import (
-    a_bolivares,
-    a_divisas,
-    a_divisas_segun_fecha,
-    get_date_value,
-    get_tasa,
-    get_tasa_fecha,
-)
-from banco_central.bcv_estadisticas_tasas import (
-    actulizar_file_tasas as update_file_tasa_bcv,
-)
-from banco_central.bcv_estadisticas_tasas import grafic as g1bcv
-from banco_central.bcv_estadisticas_tasas import grafic3 as g2bcv
-from banco_central.dolar_paralelo import actulizar_file_tasas as update_file_tasa_par
-from banco_central.dolar_paralelo import grafic as g1par
-from seniat.consultar_rif import consultar_rif
+# from accesos.datos import (
+#     factura_venta_con_su_detalle_en_usd,
+#     facturacion_x_anio,
+#     search_in_compras as buscar_en_compras,
+#     search_in_movbanco as buscar_en_mov_de_banco,
+#     search_in_ventas as buscar_en_ventas,
+#     variacion_tasa_en_cobros,
+#     variacion_tasa_en_cobros_por_mes,
+# )
+# from administracion_profit.clientes import (
+#     get_top_fact_x_cliente as top_clientes,
+#     search_clients as buscar_en_client,
+# )
+# from administracion_profit.edo_cta import (
+#     get_edo_cta_bs_y_usd,
+#     read_data_estados_de_cuenta,
+# )
+# from administracion_profit.edo_cta_registrar_mov import (
+#     establecer_color_amarillo_mov_edo_cta_por_registrar_banesco,
+#     mov_bcarios_pendientes_por_identif_en_edo_cta_banesco,
+#     registrar_mov_ban_edo_cta,
+# )
+# from administracion_profit.facturas import (
+#     diccionario_facturacion,
+#     diccionario_facturacion_total_por_anio,
+# )
+# from administracion_profit.facturas import (
+#     facturacion_saldo_x_clientes_detallado as facturas_con_saldo_det,
+#     facturacion_saldo_x_clientes_resumen as facturas_con_saldo_res,
+#     facturas_cobradas_x_clientes_detallado as facturas_cobradas_det,
+# )
+# from administracion_profit.facturas import (
+#     facturas_cobradas_x_clientes_resumen as facturas_cobradas_res,
+#     graf_calor_ventas,
+# )
+# from administracion_profit.obtener_igtf_y_comisiones import get_mov_igtf_comisiones
+# from administracion_profit.proveedores import (
+#     get_top_compras_x_prov as top_proveedores,
+#     search_prov as buscar_en_proveedores,
+# )
+# from banco_central.bcv import (
+#     a_bolivares,
+#     a_divisas,
+#     a_divisas_segun_fecha,
+#     get_date_value,
+#     get_tasa,
+#     get_tasa_fecha,
+# )
+# from banco_central.bcv_estadisticas_tasas import (
+#     actulizar_file_tasas as update_file_tasa_bcv,
+#     grafic as g1bcv,
+#     grafic3 as g2bcv,
+# )
+# from banco_central.dolar_paralelo import (
+#     actulizar_file_tasas as update_file_tasa_par,
+#     grafic as g1par,
+# )
+# from seniat.consultar_rif import consultar_rif
 
-# -->BCV
+# ##  -->BCV
 # update_file_tasa_bcv()
 # update_file_tasa_par()
 # g1bcv(anio=2024, col_valores="venta_ask2")  # var_tasas o venta_ask2
@@ -65,7 +70,7 @@ from seniat.consultar_rif import consultar_rif
 # print(
 #     "\ncantidad de $ {:,.2f}".format(a_divisas_segun_fecha(36477.9, "20240704"))
 # )  # Obtiene MONTO OPERACIÓN en usd según la tasa de la FECHA indicada
-# print("Equivalente en $ {:,.2f}".format(a_divisas(549.38)))  # Convertir a Dólares
+# print("Equivalente en $ {:,.2f}".format(a_divisas(574.90)))  # Convertir a Dólares
 # print("Equivalente en Bs. {:,.2f}".format(a_bolivares(15.6)))  # Convertir a Bolívares
 
 # # -->ESTADO DE CUENTA

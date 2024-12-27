@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
 from matplotlib.pyplot import show, subplots, title
-from numpy import array, nan, sum
+from numpy import array, nan
 from pandas import (
     DataFrame,
     Series,
@@ -245,14 +245,14 @@ def __get_doc_ajustes(libro):
 
 
 def __get_pagos():
-    sql = f"Select * FROM saPago"
+    sql = "Select * FROM saPago"
     pagos = get_read_sql(sql, **dict_con_admin)
     pagos["cob_num"] = pagos["cob_num"].str.strip()
     return pagos
 
 
 def __get_cobros():
-    sql = f"Select * FROM saCobro"
+    sql = "Select * FROM saCobro"
     cobros = get_read_sql(sql, **dict_con_admin)
     cobros["cob_num"] = cobros["cob_num"].str.strip()
     return cobros
@@ -429,11 +429,11 @@ def asiento_conatel(periodo):
 
 def facturacion_docs_sin_saldo():  # Facturas de ventas cobradas en su totalidad
     sql = (
-        f"SELECT RTRIM(co_tipo_doc) as co_tipo_doc, nro_doc, fec_reg, co_cli, "
-        f"(iif(co_tipo_doc='N/CR', -(total_bruto-monto_desc_glob), "
-        f"(total_bruto-monto_desc_glob))) as Monto_Base "
-        f"FROM saDocumentoVenta "
-        f"WHERE anulado=0 and RTRIM(co_tipo_doc) in('FACT', 'N/CR') and saldo='0'"
+        "SELECT RTRIM(co_tipo_doc) as co_tipo_doc, nro_doc, fec_reg, co_cli, "
+        "(iif(co_tipo_doc='N/CR', -(total_bruto-monto_desc_glob), "
+        "(total_bruto-monto_desc_glob))) as Monto_Base "
+        "FROM saDocumentoVenta "
+        "WHERE anulado=0 and RTRIM(co_tipo_doc) in('FACT', 'N/CR') and saldo='0'"
     )
     fact = get_read_sql(sql, **dict_con_admin)
     # #  # suprimir espacios en las cadenas de texto en varias columnas a la vez
@@ -503,10 +503,9 @@ def facturacion_saldo_x_clientes_detallado(
 def facturacion_saldo_x_clientes_resumen(
     **kwargs,
 ):  # Facturas de ventas parcialmente cobradas o sin cobro
-    anio, mes, dato_cliente, conv_usd = (
+    anio, mes, conv_usd = (
         kwargs.get("anio", "all"),
         kwargs.get("mes", "all"),
-        kwargs.get("dato_cliente", "all"),
         kwargs.get("usd", True),
     )
     df_fact = facturacion_saldo_x_clientes_detallado(anio=anio, mes=mes, usd=True)
@@ -554,10 +553,9 @@ def facturas_cobradas_x_clientes_detallado(
 def facturas_cobradas_x_clientes_resumen(
     **kwargs,
 ):  # Facturas de ventas parcialmente cobradas o sin cobro
-    anio, mes, dato_cliente, conv_usd = (
+    anio, mes, conv_usd = (
         kwargs.get("anio", "all"),
         kwargs.get("mes", "all"),
-        kwargs.get("dato_cliente", "all"),
         kwargs.get("usd", True),
     )
     df_fact = facturas_cobradas_x_clientes_detallado(anio=anio, mes=mes, usd=conv_usd)
@@ -596,7 +594,7 @@ def diccionario_facturacion(
         aggfunc="sum",
         sort=True,
     )
-    a_usd = 0 if conv_usd == False else 1
+    a_usd = 0 if conv_usd is False else 1
     anio_mes = round(df_dic.loc[(anio, mes)][a_usd], ndigits=2)
     return anio_mes
 
@@ -631,10 +629,10 @@ def data_facturacion(**kwargs) -> DataFrame:
     data = read_excel(p_data_insert_fact_y_recibos[indice_file])
     # primero se filtran los documentos que se van a facturar
     data_ = data[data["facturar"].str.upper() == "SI"].copy()
-    data_["nro_doc"] = str(doc_emit).zfill(6) if format_fact == True else int(doc_emit)
+    data_["nro_doc"] = str(doc_emit).zfill(6) if format_fact is True else int(doc_emit)
     data_["nro_control"] = (
         str(doc_ctrol_emit).zfill(6)
-        if format_fact == True
+        if format_fact is True
         else int(str(doc_ctrol_emit).replace("00-", ""))
     )  # Rellena una cadena numérica con ceros a la izquierda
     data_["indice_fact"] = data_.apply(
@@ -649,7 +647,7 @@ def data_facturacion(**kwargs) -> DataFrame:
     data_["nro_doc"] = data_.apply(
         lambda x: (
             str(int(x["nro_doc"]) + int(x["grupo"]) + 1).zfill(6)
-            if format_fact == True
+            if format_fact is True
             else (int(x["nro_doc"]) + int(x["grupo"]) + 1)
         ),
         axis=1,
@@ -657,7 +655,7 @@ def data_facturacion(**kwargs) -> DataFrame:
     data_["nro_control"] = data_.apply(
         lambda x: (
             str(int(x["nro_control"]) + int(x["grupo"]) + 1).zfill(6)
-            if format_fact == True
+            if format_fact is True
             else "00-0" + str(int(x["nro_control"]) + int(x["grupo"]) + 1)
         ),
         axis=1,
@@ -669,7 +667,7 @@ def data_facturacion(**kwargs) -> DataFrame:
         lambda x: round(
             (
                 (x["monto_base"] * x["cantidad"]) * tasa
-                if a_bolivares == True
+                if a_bolivares is True
                 else x["monto_base"] * x["cantidad"]
             ),
             ndigits=2,
@@ -842,7 +840,7 @@ def __determinar_impuesto_por_factura(
     )
     # Crea una columna con el porcentaje de iva para cada artículo
     merg1["p_iva"] = merg1.apply(lambda x: 16.0 if x["tipo_imp"] == "1" else 0, axis=1)
-    if agrupado == True:
+    if agrupado is True:
         # es necesario agrupar los encabezados de factura para totalizar la Base Imponible y el IVA
         data_agrupada = (
             merg1.groupby(
@@ -931,7 +929,6 @@ def __exe_sql_insert_encab_facturacion(
         "0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'999','{suc}','{f_act}','999','{suc}',"
         "'{f_act}',NULL)".format(
             doc=id_doc,
-            descr=descrip,
             c_cli=cod_cli,
             ven=vendedor,
             f_fact=fecha_fact,
@@ -1007,3 +1004,7 @@ def procesar_facturacion_masiva(indice_file, a_bs, num_fact_format):
         else 0
     )
     facturacion_masiva(indice_file, a_bs, num_doc, num_doc_ctrol, num_fact_format)
+
+
+if __name__ == "__main__":
+    print(facturacion_docs_sin_saldo())
