@@ -57,7 +57,7 @@ def consultar_rif(rif):
                 # data = [column.text.strip().replace('\xa0', '').split("\n")[2][10:].strip() for column in columns]
             datos_contibuyente["estatus"] = data[0]
             respuesta = ", ".join(datos_contibuyente["estatus"])
-            if not "No existe" in respuesta and not "no coincide" in respuesta:
+            if "No existe" not in respuesta and "no coincide" not in respuesta:
                 datos_contibuyente["razon_soc"] = datos_contibuyente["estatus"][2][10:]
                 for row in tables[2].find_all("tr"):
                     columns = row.find_all(["th", "td"])
@@ -65,8 +65,8 @@ def consultar_rif(rif):
                 data = data[0].strip().replace("\r", "").split("\n")
                 tipo_contribuyente = data[0]
 
-                if not "firma" in tipo_contribuyente:
-                    ##Persona Jurídica
+                if "firma" not in tipo_contribuyente:
+                    ## Persona Jurídica
                     datos_contibuyente["actividad_economica"] = data[0][21:]
                     datos_contibuyente["condicion_agente"] = (
                         data[1][11:].lstrip()
@@ -114,7 +114,7 @@ def consultar_rif(rif):
 
 
 if __name__ == "__main__":
-    rif = VerificadorDigito("26901091").get_rif()
+    rif = VerificadorDigito("J000563241").get_rif()
     no_existe = "n/e"
     if rif != no_existe:
         pprint(consultar_rif(rif), sort_dicts=False)
