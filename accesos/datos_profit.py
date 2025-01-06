@@ -12,7 +12,6 @@ from pandas import (
     options,
     pivot_table,
     to_datetime,
-    MultiIndex,
 )
 
 from accesos.files_excel import datos_estadisticas_tasas as p_est_bcv

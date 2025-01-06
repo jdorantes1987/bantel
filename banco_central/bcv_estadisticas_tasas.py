@@ -2,6 +2,7 @@ import locale
 import socket
 import ssl
 import time
+from datetime import datetime
 from urllib.request import build_opener, install_opener, urlcleanup, urlretrieve
 
 from matplotlib.pyplot import show, subplots, tight_layout, title, xticks
@@ -17,6 +18,12 @@ from banco_central.dolar_paralelo import datos_estadisticas_tasas
 ssl._create_default_https_context = ssl._create_unverified_context
 url_base = "https://www.bcv.org.ve/sites/default/files/EstadisticasGeneral"
 dic_f_usd_year = {
+    "2025": [
+        "2_1_2d25_smc.xls",
+        "2_1_2c25_smc.xls",
+        "2_1_2b25_smc.xls",
+        "2_1_2a25_smc.xls",
+    ],
     "2024": [
         "2_1_2d24_smc.xls",
         "2_1_2c24_smc.xls",
@@ -120,9 +127,9 @@ def generar_file_usd_bcv():
 # ACTUALIZA EL HISTÓRICO DE TASAS CON LA ÚLTIMA PUBLICACIÓN
 def get_data_usd_bcv_web_last_qt():
     data = DataFrame()
-    name_file_tasa_download = list(dic_f_usd_year.values())[0][
-        0
-    ]  # Convierte el diccionario en una lista y obtiene el primer elemento
+    year = str(datetime.now().year)
+    quaeter = -get_current_quarter_number()
+    name_file_tasa_download = dic_f_usd_year[year][quaeter]
     url = url_base + f"/{name_file_tasa_download}"
     socket.setdefaulttimeout(7)  # 3 seconds
     #  cambiar el encabezado del agente de usuario
@@ -325,7 +332,12 @@ def grafic3(anio, valores_eval):
     show()
 
 
+def get_current_quarter_number():
+    quarter_number = (int(datetime.now().strftime("%m")) + 2) // 3
+    return quarter_number
+
+
 if __name__ == "__main__":
     # print(get_data_usd_bcv_web_last_qt())
-    # print(actulizar_file_tasas())
-    actulizar_file_tasas_manual("20241203", 50.2)
+    actulizar_file_tasas()
+    # actulizar_file_tasas_manual("20241203", 50.2)
