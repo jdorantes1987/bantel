@@ -38,14 +38,15 @@
 #     get_top_compras_x_prov as top_proveedores,
 #     search_prov as buscar_en_proveedores,
 # )
-# from banco_central.bcv import (
-#     a_bolivares,
-#     a_divisas,
-#     a_divisas_segun_fecha,
-#     get_date_value,
-#     get_tasa,
-#     get_tasa_fecha,
-# )
+from banco_central.bcv import (
+    a_bolivares,
+    a_divisas,
+    a_divisas_segun_fecha,
+    get_date_value,
+    get_tasa,
+    get_tasa_fecha,
+)
+
 # from banco_central.bcv_estadisticas_tasas import (
 #     actulizar_file_tasas as update_file_tasa_bcv,
 #     grafic as g1bcv,
@@ -67,9 +68,9 @@
 # print(
 #     "El valor de la tasa para la fecha indicada es de:", get_tasa_fecha("20240612")
 # )  # Obtiene valor la TASA según la FECHA indicada
-# print(
-#     "\ncantidad de $ {:,.2f}".format(a_divisas_segun_fecha(36477.9, "20240704"))
-# )  # Obtiene MONTO OPERACIÓN en usd según la tasa de la FECHA indicada
+print(
+    "\ncantidad de $ {:,.2f}".format(a_divisas_segun_fecha(6983.64, "20231222"))
+)  # Obtiene MONTO OPERACIÓN en usd según la tasa de la FECHA indicada
 # print("Equivalente en $ {:,.2f}".format(a_divisas(574.90)))  # Convertir a Dólares
 # print("Equivalente en Bs. {:,.2f}".format(a_bolivares(15.6)))  # Convertir a Bolívares
 

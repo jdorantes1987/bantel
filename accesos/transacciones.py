@@ -1,6 +1,3 @@
-import accesos.conexion as cnn
-
-
 class GestorTransacciones:
     #  Se le pasa como parámetro un objeto conexión
     def __init__(self, conexion_db):
