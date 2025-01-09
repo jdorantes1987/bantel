@@ -127,10 +127,8 @@ def generar_file_usd_bcv():
 # ACTUALIZA EL HISTÓRICO DE TASAS CON LA ÚLTIMA PUBLICACIÓN
 def get_data_usd_bcv_web_last_qt():
     data = DataFrame()
-    year = str(datetime.now().year)
-    quaeter = -get_current_quarter_number()
-    name_file_tasa_download = dic_f_usd_year[year][quaeter]
-    url = url_base + f"/{name_file_tasa_download}"
+    name_file_bcv = get_name_file_tasa_download()
+    url = url_base + f"/{name_file_bcv}"
     socket.setdefaulttimeout(7)  # 3 seconds
     #  cambiar el encabezado del agente de usuario
     opener = build_opener()
@@ -171,7 +169,7 @@ def get_data_usd_bcv_web_last_qt():
             df_base["fecha"] = str(sh.cell_value(4, 3))[13:].replace("/", "").strip()
             # df_base['fecha'] = sh.name  # Anteriormente extraía la fecha del nombre de la hoja lo cual es incorrecto, ya que se debe tomar la fecha valor.
             df_base["fecha"] = to_datetime(df_base["fecha"], format="%d%m%Y")
-            df_base["archivo"] = name_file_tasa_download
+            df_base["archivo"] = name_file_bcv
             df_arr_sh.append(df_base)
         data = concat(df_arr_sh, axis=0, ignore_index=True)
         data = data[data["cod_mon"] == "USD"]
@@ -183,6 +181,13 @@ def get_data_usd_bcv_web_last_qt():
     return data
 
 
+def get_name_file_tasa_download():
+    year = str(datetime.now().year)
+    quaeter = -get_current_quarter_number()
+    name_file_tasa_download = dic_f_usd_year[year][quaeter]
+    return name_file_tasa_download
+
+
 # Actualiza el archivo tasas_BCV.xlsx
 def actulizar_file_tasas():
     locale.setlocale(locale.LC_ALL, "es_ES")
@@ -190,11 +195,8 @@ def actulizar_file_tasas():
     df_file_tasa_new = get_data_usd_bcv_web_last_qt()
     # Si no está vacio el dataframe obtenido de la web, no actualizar archivo histórico de tasas.
     if not df_file_tasa_new.empty:
-        name_file_tasa_download = list(dic_f_usd_year.values())[0][
-            0
-        ]  # Obtiene el primer nombre de la lista de diccionario
         df_file_tasa_filtred = df_file_tasa[
-            df_file_tasa["archivo"] != name_file_tasa_download
+            df_file_tasa["archivo"] != get_name_file_tasa_download()
         ]
         new_file_tasa = [df_file_tasa_new, df_file_tasa_filtred]
         df = concat(new_file_tasa).reset_index(drop=True)
