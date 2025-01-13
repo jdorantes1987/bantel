@@ -454,9 +454,10 @@ def _extrae_numero(string_num):
     return str(int(num[0]) + 1)
 
 
-def get_id_movbanco():
+def get_id_movbanco(fecha_fin) -> str:
     df = get_read_sql(
-        "Select mov_num from saMovimientoBanco " "where origen='BAN'", **dict_con_admin
+        f"Select mov_num From saMovimientoBanco Where origen='BAN' And fecha <= '{fecha_fin}'",
+        **dict_con_admin,
     )
     mb = df["mov_num"].max()
     return "MB" + _extrae_numero(mb)
@@ -765,6 +766,4 @@ def get_last__nro_fact_venta():
 
 
 if __name__ == "__main__":
-    print(
-        search_in_movbanco(texto_a_buscar="gasolina", anio="all", mes="all").to_string()
-    )
+    print(get_id_movbanco(fecha_fin="20241231"))
