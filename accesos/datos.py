@@ -8,8 +8,14 @@ from accesos.data_base import get_read_sql
 from accesos.files_excel import datos_estadisticas_tasas as p_est_bcv
 from varios.utilidades import search_df, ultimo_dia_mes
 
-# dict_con_admin = {'host': '10.100.104.11', 'base_de_datos': 'BANTEL_I'}  # BANTEL_A, BANTEL_I
-# dict_con_contab = {'host': '10.100.104.11', "base_de_datos": "BANTEL_IC"}  # TBANTEL_C, BANTEL_IC
+# dict_con_admin = {
+#     "host": "10.100.104.11",
+#     "base_de_datos": "BANTEL_I",
+# }  # BANTEL_A, BANTEL_I
+# dict_con_contab = {
+#     "host": "10.100.104.11",
+#     "base_de_datos": "BANTEL_IC",
+# }  # TBANTEL_C, BANTEL_IC
 dict_con_admin = {}
 dict_con_contab = {"base_de_datos": "TBANTEL_C"}
 
@@ -726,8 +732,25 @@ def get_monto_tasa_bcv_fecha(fecha_oper):
     fecha_operacion = to_datetime(fecha_oper)
     df_data_bcv = p_est_bcv()  # archivo BCV
     fila_tasa_dia = df_data_bcv[df_data_bcv["fecha"] == fecha_operacion]
+    if len(fila_tasa_dia) == 0:
+        fecha_operacion = fecha_anterior(fecha_operacion, df_data_bcv)
+        fila_tasa_dia = df_data_bcv[df_data_bcv["fecha"] == fecha_operacion]
+        if len(fila_tasa_dia) > 0:
+            print("Tasa BCV al:", fila_tasa_dia["fecha"].iloc[0])
+            return float(fila_tasa_dia["venta_ask2"].iloc[0])
+        else:
+            return None
     print("Tasa BCV al:", fila_tasa_dia["fecha"].iloc[0])
     return float(fila_tasa_dia["venta_ask2"].iloc[0])
+
+
+# Función para encontrar la fecha anterior más cercana
+def fecha_anterior(fecha_dada, df):
+    fechas_anteriores = df[df["fecha"] < fecha_dada]
+    if not fechas_anteriores.empty:
+        return fechas_anteriores["fecha"].iloc[0]
+    else:
+        return None
 
 
 def factura_compra_con_su_detalle(**kwargs):
