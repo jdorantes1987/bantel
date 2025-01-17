@@ -544,7 +544,7 @@ def clientes():
     sql = """
           SELECT RTRIM(co_cli) as co_cli, RTRIM(cli_des) as cli_des, direc1, direc2, dir_ent2, telefonos, fax, respons, fecha_reg,
                  plaz_pag, rif, email, tipo_per, ciudad, zip, website, contribu_e, porc_esp, horar_caja, inactivo, co_us_in, fe_us_in,
-                 co_us_mo, fe_us_mo, campo3, campo8
+                 co_us_mo, fe_us_mo, campo3, campo7, campo8
           FROM saCliente
           """
     return get_read_sql(sql, **dict_con_admin)
