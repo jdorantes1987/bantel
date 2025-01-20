@@ -8,8 +8,14 @@ from accesos.data_base import get_read_sql
 from accesos.files_excel import datos_estadisticas_tasas as p_est_bcv
 from varios.utilidades import search_df, ultimo_dia_mes
 
-# dict_con_admin = {'host': '10.100.104.11', 'base_de_datos': 'BANTEL_I'}  # BANTEL_A, BANTEL_I
-# dict_con_contab = {'host': '10.100.104.11', "base_de_datos": "BANTEL_IC"}  # TBANTEL_C, BANTEL_IC
+# dict_con_admin = {
+#     "host": "10.100.104.11",
+#     "base_de_datos": "BANTEL_I",
+# }  # BANTEL_A, BANTEL_I
+# dict_con_contab = {
+#     "host": "10.100.104.11",
+#     "base_de_datos": "BANTEL_IC",
+# }  # TBANTEL_C, BANTEL_IC
 dict_con_admin = {}
 dict_con_contab = {"base_de_datos": "TBANTEL_C"}
 
@@ -454,9 +460,10 @@ def _extrae_numero(string_num):
     return str(int(num[0]) + 1)
 
 
-def get_id_movbanco():
+def get_id_movbanco(fecha_fin) -> str:
     df = get_read_sql(
-        "Select mov_num from saMovimientoBanco " "where origen='BAN'", **dict_con_admin
+        f"Select mov_num From saMovimientoBanco Where origen='BAN' And fecha <= '{fecha_fin}'",
+        **dict_con_admin,
     )
     mb = df["mov_num"].max()
     return "MB" + _extrae_numero(mb)
@@ -537,7 +544,7 @@ def clientes():
     sql = """
           SELECT RTRIM(co_cli) as co_cli, RTRIM(cli_des) as cli_des, direc1, direc2, dir_ent2, telefonos, fax, respons, fecha_reg,
                  plaz_pag, rif, email, tipo_per, ciudad, zip, website, contribu_e, porc_esp, horar_caja, inactivo, co_us_in, fe_us_in,
-                 co_us_mo, fe_us_mo, campo3, campo8
+                 co_us_mo, fe_us_mo, campo3, campo7, campo8
           FROM saCliente
           """
     return get_read_sql(sql, **dict_con_admin)
@@ -725,8 +732,25 @@ def get_monto_tasa_bcv_fecha(fecha_oper):
     fecha_operacion = to_datetime(fecha_oper)
     df_data_bcv = p_est_bcv()  # archivo BCV
     fila_tasa_dia = df_data_bcv[df_data_bcv["fecha"] == fecha_operacion]
+    if len(fila_tasa_dia) == 0:
+        fecha_operacion = fecha_anterior(fecha_operacion, df_data_bcv)
+        fila_tasa_dia = df_data_bcv[df_data_bcv["fecha"] == fecha_operacion]
+        if len(fila_tasa_dia) > 0:
+            print("Tasa BCV al:", fila_tasa_dia["fecha"].iloc[0])
+            return float(fila_tasa_dia["venta_ask2"].iloc[0])
+        else:
+            return None
     print("Tasa BCV al:", fila_tasa_dia["fecha"].iloc[0])
     return float(fila_tasa_dia["venta_ask2"].iloc[0])
+
+
+# Función para encontrar la fecha anterior más cercana
+def fecha_anterior(fecha_dada, df):
+    fechas_anteriores = df[df["fecha"] < fecha_dada]
+    if not fechas_anteriores.empty:
+        return fechas_anteriores["fecha"].iloc[0]
+    else:
+        return None
 
 
 def factura_compra_con_su_detalle(**kwargs):
@@ -765,6 +789,4 @@ def get_last__nro_fact_venta():
 
 
 if __name__ == "__main__":
-    print(
-        search_in_movbanco(texto_a_buscar="gasolina", anio="all", mes="all").to_string()
-    )
+    print(get_id_movbanco(fecha_fin="20241231"))

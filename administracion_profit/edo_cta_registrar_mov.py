@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from dateutil.relativedelta import relativedelta
 from numpy import nan
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
@@ -13,10 +16,14 @@ from administracion_profit.edo_cta import (
 )
 
 
-def registrar_mov_ban_edo_cta():
+def registrar_mov_ban_edo_cta(anio, mes):
     df_edo_cta = read_excel(p_edo_cta_banesco)
     wb_edo_cta = load_workbook(p_edo_cta_banesco)
     sheet = wb_edo_cta.worksheets[0]
+    fecha_fin = datetime(anio, mes, 1) + relativedelta(
+        day=31
+    )  # Obtiene la fecha final del mes
+
     # m_row = sheet.max_row
     # max_col = sheet.max_column
     df_edo_cta2 = df_edo_cta.replace(nan, "")
@@ -34,7 +41,7 @@ def registrar_mov_ban_edo_cta():
             cell_coll_idb = 0.0
             cell_print_result = sheet.cell(row=[ind][0] + 2, column=9)
             cell_contabil = sheet.cell(row=[ind][0] + 2, column=10)
-            id_mov_bco = new_id_mov()  # Nuevo movimiento bancario
+            id_mov_bco = new_id_mov(fecha_fin=fecha_fin)  # Nuevo movimiento bancario
             add_new_mov(
                 id_mov_bco,
                 cell_coll_descipc,
@@ -67,8 +74,12 @@ def establecer_color_amarillo_mov_edo_cta_por_registrar_banesco(fecha_ini):
     style_amarillo = PatternFill(patternType="solid", fgColor="FFFFB9")
     style_sin_color = PatternFill()
     df = read_excel(p_edo_cta_banesco, dtype={"Referencia": str})
-    df_edo_cta = df[df["Fecha"].notnull()].copy()  # FILTRAR VALORES NO NULOS
-    df_edo_cta["Comentarios"] = df_edo_cta["Comentarios"].str[:50]
+    # Filtra las filas que no tiene fecha
+    df_edo_cta = df[df["Fecha"].notnull()].copy()
+    # Reemplaza los valores nulos de la columna 'Comentarios' por los valores de la columna 'Descripción'
+    df_edo_cta["Comentarios"] = (
+        df_edo_cta["Comentarios"].fillna(df_edo_cta["Descripción"]).str[:50]
+    )
     wb_edo_cta = load_workbook(p_edo_cta_banesco)
     mov_x_registrar = get_mov_edo_cta_pdtes_por_regist(fecha_ini)
     # Obtiene los movimientos por conciliar

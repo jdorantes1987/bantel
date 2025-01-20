@@ -11,16 +11,8 @@ path_documentos = os.path.join(
 )  # Ruta mis Documentos
 
 
-# glob.glob() return a list of file name with specified pathname
-def buscar(ruta, descripcion="*", extension="."):
-    for file_ in glob.glob(
-        ruta + "**/*" + descripcion + "*" + extension, recursive=True
-    ):
-        print(os.path.join(ruta, file_))
-
-
-def busqueda_interactiva():
-
+#  Escoger la unidad de almacenamiento
+def escoger_unidad():
     escritorio = path_desktop + "\\"
     mis_documentos = path_documentos + "\\"
     drive_str = subprocess.check_output("fsutil fsinfo drives").decode(
@@ -32,9 +24,21 @@ def busqueda_interactiva():
     drives.insert(1, mis_documentos)
     print(drives)
     ind = input("ingrese el indice de la unidad:" + "\n")
+    return drives[int(ind)]  # retorna la unidad seleccionada
+
+
+# glob.glob() return a list of file name with specified pathname
+def buscar(ruta, descripcion="*", extension="."):
+    for file_ in glob.glob(
+        ruta + "**/*" + descripcion + "*" + extension, recursive=True
+    ):
+        print(os.path.join(ruta, file_))
+
+
+def busqueda_interactiva():
+    unidad = escoger_unidad()  # Seleccionar unidad
     str_name_file = input("ingrese parte del nombre del archivo:" + "\n")
     str_ext = input("ingrese la extensión del archivo:" + "\n")
-    unidad = drives[int(ind)]
     print("\nBuscando en la unidad", unidad)
     buscar(str(unidad), str_name_file, str_ext)
 
@@ -51,7 +55,8 @@ def modified_today(path):
                 yield file_path
 
 
-def get_files_modified_today(path="C:\\Users\\jdorantes\\"):
+def get_files_modified_today():
+    path = escoger_unidad()  # Seleccionar unidad
     for c_file in modified_today(path):
         print(c_file)
 
@@ -68,10 +73,17 @@ def created_today(path):
                 yield file_path
 
 
-def get_files_created_today(ruta="C:\\Users\\jdorantes\\"):
-    for file in created_today(ruta):
+def get_files_created_today():
+    path = escoger_unidad()  # Seleccionar unidad
+    for file in created_today(path):
         print(file)
 
 
 def file_exists(path):
     return os.path.exists(path)
+
+
+if __name__ == "__main__":
+    # busqueda_interactiva()
+    # get_files_modified_today()  # archivos modificados el día de hoy
+    get_files_created_today()  # archivos creados el día de hoy
