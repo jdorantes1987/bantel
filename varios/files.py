@@ -49,10 +49,13 @@ def modified_today(path):
     for root, dirs, files in os.walk(path):
         for cur_file in files:
             file_path = os.path.join(root, cur_file)
-            if (
-                datetime.date.fromtimestamp(os.path.getmtime(file_path)) == today
-            ):  # getmtime atributo clave
-                yield file_path
+            try:
+                if (
+                    datetime.date.fromtimestamp(os.path.getmtime(file_path)) == today
+                ):  # getmtime atributo clave
+                    yield file_path
+            except OSError:
+                yield f"{file_path} no tiene permisos para acceder"
 
 
 def get_files_modified_today():
@@ -84,6 +87,6 @@ def file_exists(path):
 
 
 if __name__ == "__main__":
-    # busqueda_interactiva()
+    busqueda_interactiva()
     # get_files_modified_today()  # archivos modificados el día de hoy
-    get_files_created_today()  # archivos creados el día de hoy
+    # get_files_created_today()  # archivos creados el día de hoy

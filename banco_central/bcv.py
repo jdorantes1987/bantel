@@ -44,6 +44,8 @@ def a_divisas_segun_fecha(monto_en_bs, fecha):
     # all_rates = currency.get_rate()  # obtener todas las tasas de cambio de moneda
     # usd_rate = currency.get_rate(currency_code=cod_moneda, prettify=False)  # obtener la tasa de cambio del dólar estadounidense sin símbolo de moneda
     usd_rate = get_monto_tasa_bcv_fecha(fecha)
-    print("Valor tasa:", usd_rate)
-    cant_usd = monto_en_bs / usd_rate
-    return cant_usd
+    if usd_rate is not None:
+        print("Valor tasa:", usd_rate)
+        return monto_en_bs / usd_rate
+    else:
+        return 0
