@@ -43,24 +43,32 @@ def busqueda_interactiva():
     buscar(str(unidad), str_name_file, str_ext)
 
 
-def modified_today(path):
-    print("\n", "-" * 7, "Archivos modificados el día de hoy()", "-" * 7)
-    today = datetime.datetime.now().date()
+def files_modified(path, date_modified):
+    print(
+        "\n",
+        "-" * 7,
+        f"Archivos modificados del día {datetime.datetime.strftime(date_modified, format="%d-%m-%Y")}",
+        "-" * 7,
+    )
     for root, dirs, files in os.walk(path):
         for cur_file in files:
             file_path = os.path.join(root, cur_file)
             try:
                 if (
-                    datetime.date.fromtimestamp(os.path.getmtime(file_path)) == today
+                    datetime.date.fromtimestamp(os.path.getmtime(file_path))
+                    == date_modified
                 ):  # getmtime atributo clave
                     yield file_path
             except OSError:
                 yield f"{file_path} no tiene permisos para acceder"
 
 
-def get_files_modified_today():
+def get_files_modified(**kwargs):
+    date_modified = datetime.datetime.strptime(
+        kwargs.get("date_modified", datetime.datetime.now().date()), "%Y%m%d"
+    ).date()
     path = escoger_unidad()  # Seleccionar unidad
-    for c_file in modified_today(path):
+    for c_file in files_modified(path, date_modified=date_modified):
         print(c_file)
 
 
@@ -87,6 +95,7 @@ def file_exists(path):
 
 
 if __name__ == "__main__":
-    busqueda_interactiva()
-    # get_files_modified_today()  # archivos modificados el día de hoy
+    fecha = input("Fecha en formato AAAAMMDD:" + "\n")
+    # busqueda_interactiva()
+    get_files_modified(date_modified=fecha)  # archivos modificados el día de hoy
     # get_files_created_today()  # archivos creados el día de hoy
