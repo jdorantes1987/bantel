@@ -63,6 +63,22 @@ def files_modified(path, date_modified):
                 yield f"{file_path} no tiene permisos para acceder"
 
 
+def created_today(path, date_created):
+    print(
+        "\n",
+        "-" * 7,
+        f"Archivos creados del día {datetime.datetime.strftime(date_created, format="%d-%m-%Y")}",
+        "-" * 7,
+    )
+    for root, dirs, files in os.walk(path):
+        for cur_file in files:
+            file_path = os.path.join(root, cur_file)
+            if (
+                datetime.date.fromtimestamp(os.path.getctime(file_path)) == date_created
+            ):  # getctime atributo clave
+                yield file_path
+
+
 def get_files_modified(**kwargs):
     date_modified = datetime.datetime.strptime(
         kwargs.get("date_modified", datetime.datetime.now().date()), "%Y%m%d"
@@ -72,21 +88,12 @@ def get_files_modified(**kwargs):
         print(c_file)
 
 
-def created_today(path):
-    print("\n", "-" * 7, "Archivos creados el día de hoy()", "-" * 7)
-    today = datetime.datetime.now().date()
-    for root, dirs, files in os.walk(path):
-        for cur_file in files:
-            file_path = os.path.join(root, cur_file)
-            if (
-                datetime.date.fromtimestamp(os.path.getctime(file_path)) == today
-            ):  # getctime atributo clave
-                yield file_path
-
-
-def get_files_created_today():
+def get_files_created(**kwargs):
+    date_created = datetime.datetime.strptime(
+        kwargs.get("date_created", datetime.datetime.now().date()), "%Y%m%d"
+    ).date()
     path = escoger_unidad()  # Seleccionar unidad
-    for file in created_today(path):
+    for file in created_today(path, date_created=date_created):
         print(file)
 
 
@@ -95,7 +102,7 @@ def file_exists(path):
 
 
 if __name__ == "__main__":
-    fecha = input("Fecha en formato AAAAMMDD:" + "\n")
-    # busqueda_interactiva()
-    get_files_modified(date_modified=fecha)  # archivos modificados el día de hoy
-    # get_files_created_today()  # archivos creados el día de hoy
+    busqueda_interactiva()
+    # fecha = input("Fecha en formato AAAAMMDD:" + "\n")
+    # get_files_modified(date_modified=fecha)  # archivos modificados el día de hoy
+    # get_files_created(date_created=fecha)  # archivos creados el día de hoy
