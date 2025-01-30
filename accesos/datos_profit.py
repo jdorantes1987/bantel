@@ -3,7 +3,7 @@ from datetime import datetime
 from re import findall
 from xml.etree import ElementTree as xml_tree
 
-from numpy import nan
+from numpy import nan, where
 from pandas import (
     DataFrame,
     concat,
@@ -13,10 +13,10 @@ from pandas import (
     pivot_table,
     to_datetime,
 )
+from varios.utilidades import search_df, ultimo_dia_mes
 
 from accesos.files_excel import datos_estadisticas_tasas as p_est_bcv
 from accesos.sql_read import get_read_sql
-from varios.utilidades import search_df, ultimo_dia_mes
 
 options.display.float_format = (
     "{:,.2f}".format
@@ -214,32 +214,26 @@ class datos_profit:
             left_on="fec_reg",
             right_on="fecha",
             direction="nearest",
-        )  # Combinar por aproximación
-        merge_data["monto_base_item"] = merge_data.apply(
-            lambda x: (
-                x["monto_base_item"] / x["venta_ask2"]
-                if conv_usd
-                else x["monto_base_item"]
-            ),
-            axis=1,
         )
-        merge_data["iva"] = merge_data.apply(
-            lambda x: x["iva"] / x["venta_ask2"] if conv_usd else x["iva"], axis=1
+        merge_data["monto_base_item"] = where(
+            conv_usd,
+            merge_data["monto_base_item"] / merge_data["venta_ask2"],
+            merge_data["monto_base_item"],
+        )
+        merge_data["iva"] = where(
+            conv_usd, merge_data["iva"] / merge_data["venta_ask2"], merge_data["iva"]
         )
         # modifica la columna total_item, si es el primer reglón del detalle de la factura, se usan dos condicionales.
         # 1 evalua si se debe convertir a usd y si es el primer renglon, convertir a USD y agregar saldo.
         # 2 evalua si es el primer renglon, agregar total_item + igtf.
         # el igtf será asignado al artículo del primer renglón.
-        merge_data["total_item"] = merge_data.apply(
-            lambda x: (
-                (x["total_item"] + x["igtf"]) / x["venta_ask2"]
-                if conv_usd
-                else x["total_item"] + x["igtf"]
-            ),
-            axis=1,
+        merge_data["total_item"] = where(
+            conv_usd,
+            merge_data["total_item"] + merge_data["igtf"] / merge_data["venta_ask2"],
+            merge_data["total_item"] + merge_data["igtf"],
         )
-        merge_data["igtf"] = merge_data.apply(
-            lambda x: x["igtf"] / x["venta_ask2"] if conv_usd else x["igtf"], axis=1
+        merge_data["igtf"] = where(
+            conv_usd, merge_data["igtf"] / merge_data["venta_ask2"], merge_data["igtf"]
         )
         # modifica la columna saldo_total_doc a cero, si no es el primer reglón del detalle de la factura, se usan dos condicionales.
         # 1 evalua si debe convertir a usd y si es el primer renglon, convertir a USD y agregar saldo.
@@ -262,7 +256,7 @@ class datos_profit:
             kwargs.get("usd", True),
         )
         l_campos = self.l_campos_facturacion.copy()
-        df_fact = self.ventas_con_detalle(anio=anio, mes=mes, usd=conv_usd).copy()
+        df_fact = self.ventas_con_detalle(anio=anio, mes=mes, usd=conv_usd)
         # Se eliminan los renglones y articulos para agrupar por los demás campos
         l_campos.remove("reng_num")
         l_campos.remove("co_art")
@@ -276,7 +270,7 @@ class datos_profit:
 
         for elem_a_eliminar in lista_cifras:
             l_campos.remove(elem_a_eliminar)
-        #  Cuidado con este GroupBy ya que si existen valores vacios en cualquier campo imite esos registros
+        #  Cuidado con este GroupBy ya que si existen valores vacios en cualquier campo omite esos registros
         return df_fact.groupby(l_campos, sort=False)[lista_cifras].sum().reset_index()
 
     def variacion_tasa_en_cobros(self, **kwargs):
