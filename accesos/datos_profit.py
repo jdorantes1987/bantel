@@ -229,8 +229,11 @@ class datos_profit:
         # el igtf será asignado al artículo del primer renglón.
         merge_data["total_item"] = where(
             conv_usd,
-            merge_data["total_item"] + merge_data["igtf"] / merge_data["venta_ask2"],
-            merge_data["total_item"] + merge_data["igtf"],
+            (merge_data["total_item"] + merge_data["igtf"])
+            / merge_data[
+                "venta_ask2"
+            ],  # se debe colocar parentesis para que la operación sea correcta
+            (merge_data["total_item"] + merge_data["igtf"]),
         )
         merge_data["igtf"] = where(
             conv_usd, merge_data["igtf"] / merge_data["venta_ask2"], merge_data["igtf"]
