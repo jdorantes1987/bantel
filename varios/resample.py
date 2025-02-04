@@ -39,14 +39,18 @@ df = read_excel(
     "C:/Users/jdorantes/Documents/Analisis/Analisis Ventas.xlsm",
     sheet_name="saDocumentoVenta",
 )
-ventas = df[(df["anulado"] == False) & (df["co_tipo_doc"].isin(["FACT", "N/CR"]))]
+ventas = df[(~df["anulado"]) & (df["co_tipo_doc"].isin(["FACT", "N/CR"]))]
 ventas.set_index(
     "fec_emis", inplace=True
 )  # ejemplo colocando la columna 'fec_emis' como indice del DataFrame
-# ventas_suma = ventas['saldo'].resample('BM').sum()  # BM para sumar todos los días hábiles del mes y M para todos los dias del mes
 ventas_suma = (
-    ventas["saldo"].resample("SM", origin="end_day").sum()
-)  # end_day para que finalice la suma los 15 y los últimos de casa mes
+    ventas["saldo"].resample("BME").sum()
+)  # BM para sumar todos los días hábiles del mes y M para todos los dias del mes
+# ventas_suma = (
+#     ventas["saldo"].resample("SM", origin="end_day").sum()
+# )  # end_day para que finalice la suma los 15 y los últimos de casa mes
 #  indicando la columna que tiene la serie de fechas
-# ventas_suma = ventas.resample('BM', on='fec_emis')['saldo'].sum()  # BM para sumar todos los días hábiles del mes y M para todos los dias del mes
-print(ventas_suma.to_string())
+# ventas_suma = ventas.resample("BM", on="fec_emis")[
+#     "saldo"
+# ].sum()  # BM para sumar todos los días hábiles del mes y M para todos los dias del mes
+print(ventas_suma.reset_index().to_string())

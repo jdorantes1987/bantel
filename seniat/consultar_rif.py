@@ -114,7 +114,7 @@ def consultar_rif(rif):
 
 
 if __name__ == "__main__":
-    rif = VerificadorDigito("J000563241").get_rif()
+    rif = VerificadorDigito("j500823010").get_rif()
     no_existe = "n/e"
     if rif != no_existe:
         pprint(consultar_rif(rif), sort_dicts=False)

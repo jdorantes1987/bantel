@@ -11,31 +11,37 @@ from varios.utilidades import search_df
 hoy = date.today()
 
 
-def search_clients(string_s, **kwargs):
+def search_clients(str_search, **kwargs):
+    """Busca los datos de los clientes que coincidan con el string de búsqueda.
+
+    Args:
+        string_s (str o regex): Corresponde a la cadena de texto o expresión regular a buscar.
+
+    Returns:
+        Dataframe: retorna un dataframe con los datos de los clientes que coincidan con la búsqueda.
+    """
     df = clientes()
+    acortar_datos = kwargs.get("resumir_datos", False)
     df["co_cli"] = df["co_cli"].str.strip()
     df["fe_us_in"] = to_datetime(df["fe_us_in"]).dt.normalize()
-    resul = search_df(string_s, df)[
+    resul = search_df(str_search, df)[
         [
             "co_cli",
             "cli_des",
             "rif",
+            "direc1",
             "dir_ent2",
             "telefonos",
             "respons",
-            "direc1",
             "fe_us_in",
             "campo3",
             "campo8",
         ]
     ]
-    if acortar_datos := kwargs.get("resumir_datos", False):
-        resul["cli_des"] = resul["cli_des"].str[
-            :30
-        ]  # Extrae los primeros 40 caracteres de la izquierda
-        resul["direc1"] = resul["direc1"].str[
-            :20
-        ]  # Extrae los primeros 40 caracteres de la izquierda
+    if acortar_datos:
+        resul["cli_des"] = resul["cli_des"].str[:30]
+        resul["direc1"] = resul["direc1"].str[:20]
+        resul["dir_ent2"] = resul["dir_ent2"].str[:20]
     return resul
 
 

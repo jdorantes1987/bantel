@@ -81,7 +81,8 @@ def created_today(path, date_created):
 
 def get_files_modified(**kwargs):
     date_modified = datetime.datetime.strptime(
-        kwargs.get("date_modified", datetime.datetime.now().date()), "%Y%m%d"
+        kwargs.get("date_modified", datetime.datetime.now().date().strftime("%Y%m%d")),
+        "%Y%m%d",
     ).date()
     path = escoger_unidad()  # Seleccionar unidad
     for c_file in files_modified(path, date_modified=date_modified):
@@ -90,7 +91,8 @@ def get_files_modified(**kwargs):
 
 def get_files_created(**kwargs):
     date_created = datetime.datetime.strptime(
-        kwargs.get("date_created", datetime.datetime.now().date()), "%Y%m%d"
+        kwargs.get("date_created", datetime.datetime.now().date().strftime("%Y%m%d")),
+        "%Y%m%d",
     ).date()
     path = escoger_unidad()  # Seleccionar unidad
     for file in created_today(path, date_created=date_created):
@@ -104,5 +106,5 @@ def file_exists(path):
 if __name__ == "__main__":
     busqueda_interactiva()
     # fecha = input("Fecha en formato AAAAMMDD:" + "\n")
-    # get_files_modified(date_modified=fecha)  # archivos modificados el día de hoy
+    # get_files_modified()  # archivos modificados el día de hoy
     # get_files_created(date_created=fecha)  # archivos creados el día de hoy

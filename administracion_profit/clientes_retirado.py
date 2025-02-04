@@ -47,7 +47,7 @@ def clientes_retirados():
             "inactivo",
         ]
     ]
-    clientes_inactivos = merge_fact2[merge_fact2["inactivo"] is True].copy()
+    clientes_inactivos = merge_fact2[merge_fact2["inactivo"]].copy()
     clientes_inactivos["monto_base_item$"] = round(
         clientes_inactivos["monto_base_item$"], 2
     )
@@ -88,5 +88,6 @@ def graf1():
     plt.show()
 
 
-print(clientes_retirados().to_string())
-graf1()
+if __name__ == "__main__":
+    print(clientes_retirados().to_string())
+    graf1()

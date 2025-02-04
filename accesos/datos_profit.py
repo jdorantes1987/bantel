@@ -1,4 +1,5 @@
 import locale
+import os
 from datetime import datetime
 from re import findall
 from xml.etree import ElementTree as xml_tree
@@ -13,10 +14,10 @@ from pandas import (
     pivot_table,
     to_datetime,
 )
-from varios.utilidades import search_df, ultimo_dia_mes
 
 from accesos.files_excel import datos_estadisticas_tasas as p_est_bcv
 from accesos.sql_read import get_read_sql
+from varios.utilidades import search_df, ultimo_dia_mes
 
 options.display.float_format = (
     "{:,.2f}".format
@@ -829,10 +830,22 @@ class datos_profit:
             ].copy()
 
         today = datetime.now()
+        # Dias transcurridos entre la ultima fecha al dia de hoy
         df_fact_con_saldo_f["dias_transc"] = (
             today - df_fact_con_saldo_f["fec_reg"]
-        ).dt.days  # Dias transcurridos entre la ultima fecha al dia de hoy
-
+        ).dt.days
+        # establecer dias transcurridos en intervalos menor de 30, mayor de 30,  60, 90 y mas de 90 dias
+        df_fact_con_saldo_f["intervalo"] = df_fact_con_saldo_f["dias_transc"].apply(
+            lambda x: (
+                "0 - 30"
+                if x < 30
+                else (
+                    "30 - 60 días"
+                    if x < 60
+                    else "60 - 90 días" if x <= 90 else "más de 90 días"
+                )
+            )
+        )
         return (
             df_fact_con_saldo_f
             if vendedor == "all"
@@ -956,10 +969,16 @@ class datos_profit:
         df["fec_emis"] = df["fec_emis"].dt.normalize()
         return df
 
+    def facturacion_saldo_x_intervalo_dias(self, usd=True):
+        data = self.facturacion_saldo_x_clientes_detallado(usd=usd)
+        return data.groupby(["intervalo"])[["saldo_total_doc"]].sum().reset_index()
+
 
 if __name__ == "__main__":
     datos_profit = datos_profit(
-        host="10.100.104.11", data_base_admin="BANTEL_I", data_base_cont="TBANTEL_C"
+        host="10.100.104.11",
+        data_base_admin=os.environ["DB_NAME_DERECHA_PROFIT"],
+        data_base_cont="TBANTEL_C",
     )
-    data = datos_profit.cxc_clientes_resum_pivot()
+    data = datos_profit.facturacion_saldo_x_intervalo_dias(usd=False)
     print(data)
