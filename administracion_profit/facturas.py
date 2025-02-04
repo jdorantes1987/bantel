@@ -1007,4 +1007,4 @@ def procesar_facturacion_masiva(indice_file, a_bs, num_fact_format):
 
 
 if __name__ == "__main__":
-    print(facturacion_docs_sin_saldo())
+    print(diccionario_facturacion(anio=2025, mes=1, conv_usd=True))

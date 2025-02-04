@@ -7,7 +7,7 @@ p_data_comprobantes_manuales = "C:/Users/jdorantes/Documents/Analisis/Desarrollo
 p_data_revision_contabilidad = (
     "C:/Users/jdorantes/Documents/Analisis/Revision Contabilidad.xlsm"
 )
-p_data_edo_cta_banesco = "C:/Users/jdorantes/Documents/Analisis/Estados de Cuenta/Banesco/2024/11. NOV/Banesco Noviembre 2024.xlsx"
+p_data_edo_cta_banesco = "C:/Users/jdorantes/Documents/Analisis/Estados de Cuenta/Banesco/2024/12. DIC/Banesco Diciembre 2024.xlsx"
 p_data_insert_fact_y_recibos = (
     "X:/DESARROLLO_DataProfit/Planes Facturacion Clientes Izquierda.xlsx",
     "//10.100.104.1/AdministracionFinanzas/DESARROLLO_DataProfit/Planes Facturacion Clientes Derecha.xlsx",

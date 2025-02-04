@@ -59,6 +59,9 @@ df["gym"] = [True, False, False, True, True]
 
 
 dfx = pd.DataFrame({"A": [1, 2, 3, 4, 5], "B": [10, 20, 30, 40, 50]})
+print(dfx)
 dfx["A_next"] = dfx["A"].shift(-1)
 dfx["B_next"] = dfx["B"].shift(-1)
 print(dfx)
+
+print(df.describe())
