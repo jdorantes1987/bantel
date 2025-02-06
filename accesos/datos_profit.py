@@ -976,9 +976,9 @@ class datos_profit:
 
 if __name__ == "__main__":
     datos_profit = datos_profit(
-        host="10.100.104.11",
+        host=os.environ["HOST_PRODUCCION_PROFIT"],
         data_base_admin=os.environ["DB_NAME_DERECHA_PROFIT"],
         data_base_cont="TBANTEL_C",
     )
-    data = datos_profit.facturacion_saldo_x_intervalo_dias(usd=False)
+    data = datos_profit.clientes()
     print(data)
