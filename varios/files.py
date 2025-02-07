@@ -104,7 +104,7 @@ def file_exists(path):
 
 
 if __name__ == "__main__":
-    busqueda_interactiva()
-    # fecha = input("Fecha en formato AAAAMMDD:" + "\n")
-    # get_files_modified()  # archivos modificados el día de hoy
+    # busqueda_interactiva()
+    fecha = input("Fecha en formato AAAAMMDD:" + "\n")
+    get_files_modified(date_modified=fecha)  # archivos modificados el día de hoy
     # get_files_created(date_created=fecha)  # archivos creados el día de hoy
