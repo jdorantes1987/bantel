@@ -3,6 +3,8 @@ from datetime import date
 import comprob as cbte
 import numpy as np
 import openpyxl as op
+from openpyxl.styles import PatternFill
+from openpyxl.formatting.rule import FormulaRule
 import pandas as pd
 
 from accesos.datos import detalle_comprob, plan_cta
@@ -91,6 +93,18 @@ def __insertar_det_comprob_x_contab():
             aux,
         )
     try:
+        # Aplicar formato condicional. Regla para resaltar los renglones del comprobante a insertar
+        sheet_det_cbtes = wb_load.worksheets[1]
+        # Definir el rango de la regla de formato condicional
+        rango = "A2:L5000"
+        # Definir la fórmula de la regla de formato condicional
+        formula = 'VLOOKUP($A2,encab!$A$2:$D$1000,3,FALSE)="SI"'
+        # Definir el formato de relleno
+        fill = PatternFill(start_color="bdbebd", end_color="bdbebd", fill_type="solid")
+        # Crear la regla de formato condicional usando la fórmula
+        regla = FormulaRule(formula=[formula], fill=fill)
+        # Aplicar la regla de formato condicional al rango deseado
+        sheet_det_cbtes.conditional_formatting.add(rango, regla)
         wb_load.save(p_cbtes_manual)
         print("Archivo guardado.")
     except Exception as e:
@@ -130,13 +144,13 @@ def contabilizar_comprob_conatel(periodo, id_cbte, descrip_encab):
 
 
 if __name__ == "__main__":
-    print(asiento_conatel((2022, 12)))
+    # print(asiento_conatel((2022, 12)))
     # run
     # contabilizar_comisiones_e_igtf(
     #     "2412013", "20241231", "REG. COM. E INTER. BCARIOS DICIEMBRE 2024 BANESCO"
     # )
     # run
-    # contabilizar_comprob_manual_file_excel()
+    contabilizar_comprob_manual_file_excel()
 
     # run
     # contabilizar_comprob_conatel(
