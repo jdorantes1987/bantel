@@ -606,7 +606,7 @@ class datos_profit:
     def clientes(self):
         sql = """
             SELECT RTRIM(co_cli) as co_cli, RTRIM(cli_des) as cli_des, direc1, direc2, dir_ent2, telefonos,
-                   fax, respons, fecha_reg, plaz_pag, rif, email, tipo_per, ciudad, zip, website, contribu_e,
+                   fax, respons, fecha_reg, plaz_pag, rif, email, tipo_per, ciudad, zip, website, contribu_e, tipo_adi,
                    porc_esp, horar_caja, inactivo, co_us_in, fe_us_in, co_us_mo, fe_us_mo, campo3, RTRIM(matriz) as matriz
                    FROM saCliente
             """
