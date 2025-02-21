@@ -270,9 +270,6 @@ def factura_venta_en_usd(**kwargs):
     return df_fact.groupby(l_campos)[lista_cifras].sum().reset_index()
 
 
-factura_venta_en_usd(anio=2021)
-
-
 def variacion_tasa_en_cobros(**kwargs):
     anio, mes = kwargs.get("anio", 2023), kwargs.get("mes", "all")
     l_campos = [
