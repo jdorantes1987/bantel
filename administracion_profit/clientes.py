@@ -22,9 +22,10 @@ def search_clients(str_search, **kwargs):
     """
     df = clientes()
     acortar_datos = kwargs.get("resumir_datos", False)
+    case = kwargs.get("case", False)
     df["co_cli"] = df["co_cli"].str.strip()
     df["fe_us_in"] = to_datetime(df["fe_us_in"]).dt.normalize()
-    resul = search_df(str_search, df)[
+    resul = search_df(str_search, df, case=case)[
         [
             "co_cli",
             "cli_des",
