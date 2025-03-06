@@ -100,7 +100,7 @@ def __insertar_det_comprob_x_contab():
         # Definir la fórmula de la regla de formato condicional
         formula = 'VLOOKUP($A2,encab!$A$2:$D$1000,3,FALSE)="SI"'
         # Definir el formato de relleno
-        fill = PatternFill(start_color="bdbebd", end_color="bdbebd", fill_type="solid")
+        fill = PatternFill(start_color="f8c2c8", end_color="f8c2c8", fill_type="solid")
         # Crear la regla de formato condicional usando la fórmula
         regla = FormulaRule(formula=[formula], fill=fill)
         # Aplicar la regla de formato condicional al rango deseado
