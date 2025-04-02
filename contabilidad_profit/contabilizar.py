@@ -147,12 +147,12 @@ if __name__ == "__main__":
     # print(asiento_conatel((2022, 12)))
     # run
     # contabilizar_comisiones_e_igtf(
-    #     "2412013", "20241231", "REG. COM. E INTER. BCARIOS DICIEMBRE 2024 BANESCO"
+    #     "2501013", "20250131", "REG. COM. E INTER. BCARIOS ENERO 2025 BANESCO"
     # )
     # run
     contabilizar_comprob_manual_file_excel()
 
-    # run
+    # # run
     # contabilizar_comprob_conatel(
-    #     (2024, 12), "2412018", "PROV. CONATEL Y FONACIT DIC 2024"
+    #     (2025, 2), "2502018", "PROV. CONATEL Y FONACIT FEB 2025"
     # )

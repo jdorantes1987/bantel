@@ -58,6 +58,7 @@ def consultar_rif(rif):
             datos_contibuyente["estatus"] = data[0]
             respuesta = ", ".join(datos_contibuyente["estatus"])
             if "No existe" not in respuesta and "no coincide" not in respuesta:
+                datos_contibuyente["rif"] = rif
                 datos_contibuyente["razon_soc"] = datos_contibuyente["estatus"][2][10:]
                 for row in tables[2].find_all("tr"):
                     columns = row.find_all(["th", "td"])
@@ -114,7 +115,7 @@ def consultar_rif(rif):
 
 
 if __name__ == "__main__":
-    rif = VerificadorDigito("j500823010").get_rif()
+    rif = VerificadorDigito("J003401684").get_rif()
     no_existe = "n/e"
     if rif != no_existe:
         pprint(consultar_rif(rif), sort_dicts=False)
