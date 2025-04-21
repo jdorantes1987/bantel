@@ -25,7 +25,12 @@ def escoger_unidad():
     drives.append("\\\\10.100.104.1\\AdministracionFinanzas\\")
     print(drives)
     ind = input("ingrese el indice de la unidad:" + "\n")
-    return drives[int(ind)]  # retorna la unidad seleccionada
+    # si es numérico
+    if ind.isnumeric():
+        if int(ind) > len(drives) - 1:
+            print("El indice no es correcto, se seleccionará la unidad por defecto")
+            ind = 0
+        return drives[int(ind)]
 
 
 # glob.glob() return a list of file name with specified pathname
@@ -38,6 +43,9 @@ def buscar(ruta, descripcion="*", extension="."):
 
 def busqueda_interactiva():
     unidad = escoger_unidad()  # Seleccionar unidad
+    if unidad is None:
+        print("No se seleccionó ninguna unidad")
+        return
     str_name_file = input("ingrese parte del nombre del archivo:" + "\n")
     str_ext = input("ingrese la extensión del archivo:" + "\n")
     print("\nBuscando en la unidad", unidad)
@@ -74,10 +82,14 @@ def created_today(path, date_created):
     for root, dirs, files in os.walk(path):
         for cur_file in files:
             file_path = os.path.join(root, cur_file)
-            if (
-                datetime.date.fromtimestamp(os.path.getctime(file_path)) == date_created
-            ):  # getctime atributo clave
-                yield file_path
+            try:
+                if (
+                    datetime.date.fromtimestamp(os.path.getctime(file_path))
+                    == date_created
+                ):  # getctime atributo clave
+                    yield file_path
+            except OSError:
+                yield f"{file_path} no tiene permisos para acceder"
 
 
 def get_files_modified(**kwargs):
@@ -86,6 +98,9 @@ def get_files_modified(**kwargs):
         "%Y%m%d",
     ).date()
     path = escoger_unidad()  # Seleccionar unidad
+    if path is None:
+        print("No se seleccionó ninguna unidad")
+        return
     for c_file in files_modified(path, date_modified=date_modified):
         print(c_file)
 
@@ -96,6 +111,9 @@ def get_files_created(**kwargs):
         "%Y%m%d",
     ).date()
     path = escoger_unidad()  # Seleccionar unidad
+    if path is None:
+        print("No se seleccionó ninguna unidad")
+        return
     for file in created_today(path, date_created=date_created):
         print(file)
 
