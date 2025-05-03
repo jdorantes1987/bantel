@@ -72,7 +72,8 @@ def files_modified(path, date_modified):
                 yield f"{file_path} no tiene permisos para acceder"
 
 
-def created_today(path, date_created):
+def created_today(path, date_created: datetime.date):
+    """Generador que devuelve los archivos creados en una fecha específica"""
     print(
         "\n",
         "-" * 7,
@@ -118,12 +119,12 @@ def get_files_created(**kwargs):
         print(file)
 
 
-def file_exists(path):
+def file_exists(path: str) -> bool:
     return os.path.exists(path)
 
 
 if __name__ == "__main__":
-    busqueda_interactiva()
-    # fecha = input("Fecha en formato AAAAMMDD:" + "\n")
+    # busqueda_interactiva()
+    fecha = input("Fecha en formato AAAAMMDD:" + "\n")
     # get_files_modified(date_modified=fecha)  # archivos modificados el día de hoy
-    # get_files_created(date_created=fecha)  # archivos creados el día de hoy
+    get_files_created(date_created=fecha)  # archivos creados el día de hoy
