@@ -105,7 +105,13 @@ def __doc_select_data(k_tabla, fec_ini, fec_fin):
             * 0.01
         )
         docs.loc["aislr"] = ["ANT. ISLR", total_ant_islr, 0, 0, total_ant_islr]
-    docs = concat([docs, ret_islr_t], axis=0, ignore_index=True)
+    # Verifica si `ret_islr_t` no está vacío ni contiene solo valores NaN
+    if not ret_islr_t.empty and not ret_islr_t.isna().all().all():
+        docs = concat([docs, ret_islr_t], axis=0, ignore_index=True)
+    else:
+        print(
+            "Advertencia: `ret_islr_t` está vacío o contiene solo valores NaN. Se omite la concatenación."
+        )
     docs.loc["tg"] = [
         "TOTAL NETO",
         docs.loc[

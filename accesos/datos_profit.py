@@ -973,12 +973,43 @@ class datos_profit:
         data = self.facturacion_saldo_x_clientes_detallado(usd=usd)
         return data.groupby(["intervalo"])[["saldo_total_doc"]].sum().reset_index()
 
+    def doc_cxc_clientes(
+        self,
+    ):
+        sql = "EXEC [RepDocumentoCXCxCliente]"
+        df = get_read_sql(sql, **self.dict_con_admin)
+        df["co_cli"] = df["co_cli"].str.strip()
+        df["co_tipo_doc"] = df["co_tipo_doc"].str.strip()
+        df["nro_doc"] = df["nro_doc"].str.strip()
+        df["fec_emis"] = df["fec_emis"].dt.normalize()
+        return df
+
+    def doc_cxc_clientes_resumido(self):
+        df = self.doc_cxc_clientes()
+        campos_resum = ["co_cli", "co_tipo_doc", "cli_des"]
+        doc_debitos = ["FACT", "AJPM", "AJPA"]
+        resumen = df.groupby(campos_resum)[["saldo"]].sum().reset_index()
+        # Filtra los saldos distintos de cero
+        resumen = resumen[resumen["saldo"] != 0].copy()
+        # Cambia el signo solo si co_tipo_doc no está en doc_debitos, si no deja el valor original
+        resumen["saldo"] = where(
+            ~resumen["co_tipo_doc"].isin(doc_debitos),
+            -resumen["saldo"],
+            resumen["saldo"],
+        )
+        campos_resum.pop(
+            1
+        )  # Elimina el campo co_tipo_doc de la lista de campos a resumir
+        resumen = resumen[resumen["saldo"] < 0]
+        resumen = resumen.groupby(campos_resum)[["saldo"]].sum().reset_index()
+        return resumen
+
 
 if __name__ == "__main__":
     datos_profit = datos_profit(
         host=os.environ["HOST_PRODUCCION_PROFIT"],
-        data_base_admin=os.environ["DB_NAME_DERECHA_PROFIT"],
+        data_base_admin=os.environ["DB_NAME_IZQUIERDA_PROFIT"],
         data_base_cont="TBANTEL_C",
     )
-    data = datos_profit.clientes()
+    data = datos_profit.doc_cxc_clientes_resumido()
     print(data)
