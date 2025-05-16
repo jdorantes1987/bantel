@@ -997,7 +997,6 @@ class datos_profit:
             -resumen["saldo"],
             resumen["saldo"],
         )
-        resumen.to_excel("resumen_cxc_clientes.xlsx", index=False, engine="openpyxl")
         # Elimina el campo co_tipo_doc de la lista de campos a resumir
         campos_resum.pop(1)
         resumen = resumen.groupby(campos_resum)[["saldo"]].sum().reset_index()
