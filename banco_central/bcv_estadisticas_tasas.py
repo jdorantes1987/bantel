@@ -21,7 +21,7 @@ dic_f_usd_year = {
     "2025": [
         "2_1_2d25_smc.xls",
         "2_1_2c25_smc.xls",
-        "2_1_2b25_smc_10.xls",
+        "2_1_2b25_smc.xls",
         "2_1_2a25_smc.xls",
     ],
     "2024": [
