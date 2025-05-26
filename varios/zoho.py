@@ -5,10 +5,13 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from dotenv import load_dotenv
+
 
 def message(
     address_send, subject="Python Notification", text="", img=None, attachment=None
 ):
+    load_dotenv()
     # build message contents
     msg = MIMEMultipart()
     msg["Subject"] = subject  # add in the subject
@@ -50,7 +53,7 @@ def message(
     server = smtplib.SMTP_SSL("smtp.zoho.com", 465)
 
     # Perform operations via server
-    server.login("jdorantes@bantel.net.ve", "V183291145*")
-    server.sendmail("jdorantes@bantel.net.ve", address_send, msg.as_string())
+    server.login(os.getenv("UZH"), os.getenv("PZH"))
+    server.sendmail(os.getenv("UZH"), address_send, msg.as_string())
     server.quit()
     print("Correo enviado.")
