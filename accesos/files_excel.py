@@ -12,6 +12,7 @@ p_data_insert_fact_y_recibos = (
     "X:/DESARROLLO_DataProfit/Planes Facturacion Clientes Izquierda.xlsx",
     "//10.100.104.1/AdministracionFinanzas/DESARROLLO_DataProfit/Planes Facturacion Clientes Derecha.xlsx",
 )
+p_data_iva_forma99030 = "C:/Users/jdorantes/Documents/Analisis/FORMAS 99030.xlsx"
 
 
 def datos_estadisticas_tasas():
