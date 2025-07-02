@@ -807,6 +807,16 @@ class datos_profit:
             """
         return get_read_sql(sql, **self.dict_con_admin)
 
+    def get_last__nro_fact_venta_facturacion_digital(self, param=None):
+        sql = f"""
+                SELECT RTRIM(doc_num) as doc_num, RTRIM(n_control) as n_control
+                FROM saFacturaVenta
+                WHERE doc_num in (SELECT MAX(RTRIM(doc_num))
+                                  FROM saFacturaVenta
+                                  WHERE fec_emis >= '{param["fechaInicio"]}' AND fec_emis <= '{param["fechaFin"]}')
+            """
+        return get_read_sql(sql, **self.dict_con_admin)
+
     #  Facturas de ventas parcialmente cobradas o sin cobro
     def facturacion_saldo_x_clientes_detallado(self, **kwargs):
         l_campos = self.campos_comunes_fact.copy()
@@ -1005,10 +1015,17 @@ class datos_profit:
 
 
 if __name__ == "__main__":
+    from datetime import date
+
+    hoy = date.today().strftime("%Y-%m-%d")
     datos_profit = datos_profit(
         host=os.environ["HOST_PRODUCCION_PROFIT"],
-        data_base_admin=os.environ["DB_NAME_IZQUIERDA_PROFIT"],
+        data_base_admin=os.environ["DB_NAME_DERECHA_PROFIT"],
         data_base_cont="TBANTEL_C",
     )
-    data = datos_profit.doc_cxc_clientes_resumido()
+    rango_fechas = {
+        "fechaInicio": "2025-06-20",  # Fecha de inicio del rango
+        "fechaFin": hoy,  # Fecha de fin del rango
+    }
+    data = datos_profit.get_last__nro_fact_venta_facturacion_digital(param=rango_fechas)
     print(data)
