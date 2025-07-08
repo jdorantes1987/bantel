@@ -813,7 +813,7 @@ class datos_profit:
                 FROM saFacturaVenta
                 WHERE doc_num in (SELECT MAX(RTRIM(doc_num))
                                   FROM saFacturaVenta
-                                  WHERE fec_emis >= '{param["fechaInicio"]}' AND fec_emis <= '{param["fechaFin"]}')
+                                  WHERE fec_emis >= '{param["fechaInicio"]}' AND fec_emis <= '{param["fechaFin"]} 23:59:59')
             """
         return get_read_sql(sql, **self.dict_con_admin)
 
