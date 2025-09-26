@@ -23,7 +23,9 @@ def escoger_unidad():
     drives.insert(0, escritorio)
     drives.insert(1, mis_documentos)
     drives.append("\\\\10.100.104.1\\AdministracionFinanzas\\")
-    print(drives)
+    # Mostrar las unidades disponibles con su índice
+    for i, d in enumerate(drives):
+        print(f"{i}: {d}")
     ind = input("ingrese el indice de la unidad:" + "\n")
     # si es numérico
     if ind.isnumeric():
@@ -126,5 +128,5 @@ def file_exists(path: str) -> bool:
 if __name__ == "__main__":
     # busqueda_interactiva()
     fecha = input("Fecha en formato AAAAMMDD:" + "\n")
-    # get_files_modified(date_modified=fecha)  # archivos modificados el día de hoy
-    get_files_created(date_created=fecha)  # archivos creados el día de hoy
+    get_files_modified(date_modified=fecha)  # archivos modificados el día de hoy
+    # get_files_created(date_created=fecha)  # archivos creados el día de hoy
