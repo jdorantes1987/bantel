@@ -18,6 +18,12 @@ from banco_central.dolar_paralelo import datos_estadisticas_tasas
 ssl._create_default_https_context = ssl._create_unverified_context
 url_base = "https://www.bcv.org.ve/sites/default/files/EstadisticasGeneral"
 dic_f_usd_year = {
+    "2026": [
+        "2_1_2d26_smc.xls",
+        "2_1_2c26_smc.xls",
+        "2_1_2b26_smc.xls",
+        "2_1_2a26_smc.xls",
+    ],
     "2025": [
         "2_1_2d25_smc.xls",
         "2_1_2c25_smc.xls",
