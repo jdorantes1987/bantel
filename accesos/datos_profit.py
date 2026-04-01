@@ -1,5 +1,6 @@
 import locale
 import os
+import sys
 from datetime import datetime
 from re import findall
 from xml.etree import ElementTree as xml_tree
@@ -15,9 +16,12 @@ from pandas import (
     to_datetime,
 )
 
+sys.path.append("..\\bantel")
+
+from varios.utilidades import search_df, ultimo_dia_mes
+
 from accesos.files_excel import datos_estadisticas_tasas as p_est_bcv
 from accesos.sql_read import get_read_sql
-from varios.utilidades import search_df, ultimo_dia_mes
 
 options.display.float_format = (
     "{:,.2f}".format
@@ -1018,14 +1022,10 @@ if __name__ == "__main__":
     from datetime import date
 
     hoy = date.today().strftime("%Y-%m-%d")
-    datos_profit = datos_profit(
+    oDProfit = datos_profit(
         host=os.environ["HOST_PRODUCCION_PROFIT"],
         data_base_admin=os.environ["DB_NAME_DERECHA_PROFIT"],
         data_base_cont="TBANTEL_C",
     )
-    rango_fechas = {
-        "fechaInicio": "2025-06-20",  # Fecha de inicio del rango
-        "fechaFin": hoy,  # Fecha de fin del rango
-    }
-    data = datos_profit.get_last__nro_fact_venta_facturacion_digital(param=rango_fechas)
-    print(data)
+    data = oDProfit.ventas_sin_detalle(anio=2024, usd=True)
+    data.to_excel("data_ventas_sin_detalle.xlsx", index=False)
