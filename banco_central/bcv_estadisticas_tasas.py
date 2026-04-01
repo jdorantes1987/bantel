@@ -3,6 +3,7 @@ import socket
 import ssl
 import time
 from datetime import datetime
+from urllib.error import HTTPError, URLError
 from urllib.request import build_opener, install_opener, urlcleanup, urlretrieve
 
 from matplotlib.pyplot import show, subplots, tight_layout, title, xticks
@@ -133,8 +134,7 @@ def generar_file_usd_bcv():
 # ACTUALIZA EL HISTÓRICO DE TASAS CON LA ÚLTIMA PUBLICACIÓN
 def get_data_usd_bcv_web_last_qt():
     data = DataFrame()
-    name_file_bcv = get_name_file_tasa_download()
-    url = url_base + f"/{name_file_bcv}"
+    name_file_bcv = ""
     socket.setdefaulttimeout(7)  # 3 seconds
     #  cambiar el encabezado del agente de usuario
     opener = build_opener()
@@ -145,10 +145,27 @@ def get_data_usd_bcv_web_last_qt():
             "Mozilla/5.0 (iPhone; CPU iPhone OS 12_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/7.0.4 Mobile/16B91 Safari/605.1.15",
         )
     ]
+    install_opener(opener)
     try:
-        # urlretrieve Descarga archivos de la red al equipo local
-        file_name = urlretrieve(url)
-        print("Se descargó archivo de la ruta:", url)
+        file_name = None
+        for candidate in get_name_file_tasa_download_candidates():
+            url = url_base + f"/{candidate}"
+            try:
+                # urlretrieve Descarga archivos de la red al equipo local
+                file_name = urlretrieve(url)
+                name_file_bcv = candidate
+                print("Se descargó archivo de la ruta:", url)
+                break
+            except HTTPError as ex:
+                # Si el archivo no existe (404), intenta con el siguiente candidato
+                if ex.code == 404:
+                    continue
+                raise
+
+        if file_name is None:
+            print("No se encontró archivo BCV disponible para actualizar tasas.")
+            return data
+
         # Como el resultado de la descarga es una tuple con la información del archivo y el recurso de la web se coloca el indice [0] que es la del archivo
         wb = open_workbook(
             file_name[0], on_demand=True
@@ -184,14 +201,28 @@ def get_data_usd_bcv_web_last_qt():
         # del wb
     except socket.timeout:
         print("socket.timeout")
+    except HTTPError as ex:
+        print(f"Error HTTP al intentar descargar archivo BCV: {ex}")
+    except URLError as ex:
+        print(f"Error de conexión al intentar descargar archivo BCV: {ex}")
     return data
 
 
 def get_name_file_tasa_download():
+    candidates = get_name_file_tasa_download_candidates()
+    return candidates[0] if candidates else ""
+
+
+def get_name_file_tasa_download_candidates():
     year = str(datetime.now().year)
-    quaeter = -get_current_quarter_number()
-    name_file_tasa_download = dic_f_usd_year[year][quaeter]
-    return name_file_tasa_download
+    quarter_number = get_current_quarter_number()
+    files_year = dic_f_usd_year.get(year, [])
+    if not files_year:
+        return []
+
+    # Orden de pruebas: trimestre actual y luego anteriores del mismo año.
+    candidates = [files_year[-q] for q in range(quarter_number, 0, -1)]
+    return candidates
 
 
 # Actualiza el archivo tasas_BCV.xlsx
