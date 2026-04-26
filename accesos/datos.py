@@ -786,4 +786,4 @@ def get_last__nro_fact_venta():
 
 
 if __name__ == "__main__":
-    print(get_id_movbanco(fecha_fin="20241231"))
+    print(get_last__nro_fact_venta())

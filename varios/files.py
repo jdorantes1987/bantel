@@ -20,9 +20,10 @@ def escoger_unidad():
     )  # decode('utf-8') Eliminar el prefijo 'b' de una caden
     drives = drive_str.split()
     drives.pop(0)  # Elimina el primer elemento
-    drives.insert(0, escritorio)
-    drives.insert(1, mis_documentos)
+    drives.insert(0, escritorio)  # Agregar el escritorio al inicio de la lista
+    drives.insert(1, mis_documentos)  # Agregar mis documentos en la segunda posición
     drives.append("\\\\10.100.104.1\\AdministracionFinanzas\\")
+    drives.append("\\\\10.100.104.1\\rrhh\\")
     # Mostrar las unidades disponibles con su índice
     for i, d in enumerate(drives):
         print(f"{i}: {d}")

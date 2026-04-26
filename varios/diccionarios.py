@@ -1,6 +1,6 @@
 """
- Los diccionarios en Python son una estructura de datos
- que permite almacenar su contenido en forma de llave y valor.
+Los diccionarios en Python son una estructura de datos
+que permite almacenar su contenido en forma de llave y valor.
 """
 
 d1 = {"Nombre": "Sara", "Edad": 27, "Documento": 1003882}

@@ -109,7 +109,7 @@ def partidas_por_identificar_libro(fecha_ini, fecha_fin):
 
 
 if __name__ == "__main__":
-    fecha_i, fecha_f = "20250101", "20250131"
+    fecha_i, fecha_f = "20250201", "20250228"
     print(
         "Partidas por identificar edo. cta:\n",
         partidas_por_identificar_edo_cta(

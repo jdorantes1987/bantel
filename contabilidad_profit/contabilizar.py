@@ -3,12 +3,13 @@ from datetime import date
 import comprob as cbte
 import numpy as np
 import openpyxl as op
-from openpyxl.styles import PatternFill
-from openpyxl.formatting.rule import FormulaRule
 import pandas as pd
+from openpyxl.formatting.rule import FormulaRule
+from openpyxl.styles import PatternFill
 
 from accesos.datos import detalle_comprob, plan_cta
 from accesos.files_excel import p_data_comprobantes_manuales as p_cbtes_manual
+from accesos.files_excel import p_data_iva_forma99030
 from administracion_profit.facturas import asiento_conatel
 from administracion_profit.obtener_igtf_y_comisiones import (
     contabilizar_comisiones_e_igtf,
@@ -144,15 +145,15 @@ def contabilizar_comprob_conatel(periodo, id_cbte, descrip_encab):
 
 
 if __name__ == "__main__":
-    # print(asiento_conatel((2022, 12)))
+    # print(asiento_conatel((2025, 8)))
     # run
     # contabilizar_comisiones_e_igtf(
-    #     "2501013", "20250131", "REG. COM. E INTER. BCARIOS ENERO 2025 BANESCO"
+    #     "2502013", "20250228", "REG. COM. E INTER. BCARIOS FEBRERO 2025 BANESCO"
     # )
     # run
     contabilizar_comprob_manual_file_excel()
 
     # # run
     # contabilizar_comprob_conatel(
-    #     (2025, 2), "2502018", "PROV. CONATEL Y FONACIT FEB 2025"
+    #     (2026, 3), "2603018", "PROV. CONATEL Y FONACIT MAR 2026"
     # )

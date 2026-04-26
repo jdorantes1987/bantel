@@ -71,15 +71,15 @@ from banco_central.bcv_estadisticas_tasas import (
 #     "El valor de la tasa para la fecha indicada es de:", get_tasa_fecha("20240612")
 # )  # Obtiene valor la TASA según la FECHA indicada
 # print(
-#     "\ncantidad de $ {:,.2f}".format(a_divisas_segun_fecha(100, "20250131"))
+#     "\ncantidad de $ {:,.2f}".format(a_divisas_segun_fecha(750, "20240215"))
 # )  # Obtiene MONTO OPERACIÓN en usd según la tasa de la FECHA indicada
-# print("Equivalente en $ {:,.2f}".format(a_divisas(511)))  # Convertir a Dólares
-# print("Equivalente en Bs. {:,.2f}".format(a_bolivares(50)))  # Convertir a Bolívares
+# print("Equivalente en $ {:,.2f}".format(a_divisas(7583.17)))  # Convertir a Dólares
+# print("Equivalente en Bs. {:,.2f}".format(a_bolivares(10)))  # Convertir a Bolívares
 
 # # -->ESTADO DE CUENTA
 # # Registrar los movimientos bancarios seleccionados del estado de cuenta actual banesco
-# registrar_mov_ban_edo_cta(anio=2024, mes=12)
-# establecer_color_amarillo_mov_edo_cta_por_registrar_banesco("20241201")
+# registrar_mov_ban_edo_cta(anio=2025, mes=2)
+# establecer_color_amarillo_mov_edo_cta_por_registrar_banesco("20250101")
 # print(mov_bcarios_pendientes_por_identif_en_edo_cta_banesco("2024-12-01").to_string())
 # get_edo_cta_bs_y_usd()  # Estado de cuenta banesco en $$$$$$$
 # # Muestra los resultados de las comisiones e IGTF a registrar manualmente
@@ -87,12 +87,14 @@ from banco_central.bcv_estadisticas_tasas import (
 # directory = "C:/Users/jdorantes/Documents/Analisis/Estados de Cuenta/Banesco/2024/"
 # file_pattern = "*2024*.xlsx"
 # df = read_data_estados_de_cuenta(directory, file_pattern)
-# df["Referencia"] = df["Referencia"].astype("str")
+# # df["Referencia"] = df["Referencia"].astype("str")
 # df[df["Pendiente"].str.upper() == "SI"].to_excel("partidas pendientes banesco.xlsx")
 
-# # -->BANCO
-# # Muestra los resultados de la busqueda en los movimientos bancarios
-# print(buscar_en_mov_de_banco(texto_a_buscar="remol", anio="all", mes="all").to_string())
+# # # -->BANCO
+# # # Muestra los resultados de la busqueda en los movimientos bancarios
+print(
+    buscar_en_mov_de_banco(texto_a_buscar="timbre", anio="all", mes="all").to_string()
+)
 
 
 # # -->PROVEEDORES
@@ -100,7 +102,7 @@ from banco_central.bcv_estadisticas_tasas import (
 #     buscar_en_proveedores("V133396426").reset_index(drop=True).to_string()
 # )  # Muestra los resultados de la busqueda en la tabla de PROVEEDORES
 # print(
-# buscar_en_compras(str_search="jeep", anio="all").to_string()
+#     buscar_en_compras(str_search="V174985312", anio="all").to_string()
 # )  # Muestra los resultados de la busqueda en las COMPRAS
 # print(top_proveedores().to_string())  # TOP Facturación por proveedores
 
@@ -112,8 +114,12 @@ patron2 = r"[A-Za-z]{2}\d{1,3}$"
 patron3 = (
     r"^0414-\d{7}$"  # Expresión regular para números de teléfono que comienzan con 414
 )
+# Expresión regular para ubicar los clientes AGRUPADOS que tiene guion (-) ejemplo: CL39-4 o J500481012-1
+patron4 = r"^[a-zA-Z]{1,2}\d{3,9}-\d{1,2}$"
 # print(
-#     buscar_en_client("maria", resumir_datos=True).reset_index(drop=True).to_string()
+#     buscar_en_client(patron4, resumir_datos=True, case=True)
+#     .reset_index(drop=True)
+#     .to_string()
 # )  # Muestra los resultados de la busqueda en la tabla de CLIENTES
 # print(
 #     buscar_en_ventas(str_search="CL251", anio="all", mes="all")
@@ -123,9 +129,9 @@ patron3 = (
 # print(top_clientes(anio=2024, top=5).to_string())  # TOP Facturación por cliente
 # # Listado de facturacion del mes con la variación en la tasa en USD
 # # "Ojo solo hace la comparación de la base imponible de la factura"
-# print(variacion_tasa_en_cobros(anio=2024).to_string())
+# print(variacion_tasa_en_cobros(anio=2025).to_string())
 # print(
-#     variacion_tasa_en_cobros_por_mes(anio=2023)
+#     variacion_tasa_en_cobros_por_mes(anio=2025)
 # )  # Resumen de facturacion del mes con la variación en la tasa en USD
 # print(
 #     facturas_con_saldo_det(anio="all", dato_cliente="all").to_string()

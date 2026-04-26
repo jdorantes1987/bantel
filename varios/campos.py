@@ -1,6 +1,6 @@
 import pandas as pd
 
-pagos = pd.read_excel("RepFormatoPago.xlsx")
+pagos = pd.read_excel(r"varios\RepFormatoPago.xlsx")
 
 print("\n" * 2, "Convertir campos en mayúsculas")
 camposInMayus = pagos.rename(columns=str.upper)

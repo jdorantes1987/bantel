@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 # Lee un archivo .xlsx
-pagos = pd.read_excel("RepFormatoPago.xlsx")
+pagos = pd.read_excel(r"varios\RepFormatoPago.xlsx")
 
 print("\n" * 2)
 print(">Reemplazar valores en 0")
