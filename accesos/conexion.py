@@ -33,16 +33,16 @@ class ConexionBD:
 
     def conectar(self):
         try:
-            str_conn = (
-                "DRIVER={prov};SERVER={host};DATABASE={db};UID={user};PWD={pw}".format(
-                    prov=self.proveedor,
-                    host=self.servidor,
-                    db=self.bddatos,
-                    user=self.usuario,
-                    pw=self.clave,
-                )
+            self.conn = pyodbc.connect(
+                f"DRIVER={{FreeTDS}};"
+                f"SERVER={self.servidor};"
+                f"PORT=1433;"
+                f"DATABASE={self.bddatos};"
+                f"UID={self.usuario};"
+                f"PWD={self.clave};"
+                f"TDS_Version=7.4;"  # Versión para SQL Server 2008 en adelante
+                f"Mars_Connection=Yes;"
             )
-            self.conn = pyodbc.connect(str_conn)
             # print("Conexión exitosa a la base de datos.")
         except pyodbc.Error as e:
             print(f"Error al conectar a la base de datos: {e}")
@@ -53,8 +53,19 @@ class ConexionBD:
             # print("Conexión cerrada.")
 
     def c_engine(self):
-        con_str = f"DRIVER={self.proveedor};SERVER={self.servidor};DATABASE={self.bddatos};UID={self.usuario};PWD={self.clave}"
-        connection_url = URL.create(self.driver, query={self.tipo_con: con_str})
+        url_sqlserver = (
+            f"DRIVER={{FreeTDS}};"
+            f"SERVER={self.servidor};"
+            f"PORT=1433;"
+            f"DATABASE={self.bddatos};"
+            f"UID={self.usuario};"
+            f"PWD={self.clave};"
+            f"TDS_Version=7.4;"  # Versión para SQL Server 2008 en adelante
+            f"Mars_Connection=Yes;"
+        )
+        connection_url = URL.create(
+            "mssql+pyodbc", query={"odbc_connect": url_sqlserver}
+        )
         return create_engine(connection_url)
 
 
