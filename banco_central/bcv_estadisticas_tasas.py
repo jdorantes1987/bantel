@@ -227,7 +227,7 @@ def get_name_file_tasa_download_candidates():
 
 # Actualiza el archivo tasas_BCV.xlsx
 def actulizar_file_tasas():
-    locale.setlocale(locale.LC_ALL, "es_ES")
+    locale.setlocale(locale.LC_ALL, "es_ES.UTF-8")
     df_file_tasa = datos_estad_bcv()
     df_file_tasa_new = get_data_usd_bcv_web_last_qt()
     # Si no está vacio el dataframe obtenido de la web, no actualizar archivo histórico de tasas.
@@ -240,7 +240,7 @@ def actulizar_file_tasas():
         df["año"] = df["fecha"].dt.year
         df["mes"] = df["fecha"].dt.month
         df["dia"] = df["fecha"].dt.day
-        df["mes_"] = df["fecha"].dt.month_name(locale="es_ES").str[:3]
+        df["mes_"] = df["fecha"].dt.month_name(locale="es_ES.UTF-8").str[:3]
         locale.setlocale(locale.LC_ALL, "")
         df["var_tasas"] = df["venta_ask2"].diff(
             periods=-1
@@ -283,7 +283,7 @@ def actulizar_file_tasas_manual(fecha, valor_tasa):
         df["año"] = df["fecha"].dt.year
         df["mes"] = df["fecha"].dt.month
         df["dia"] = df["fecha"].dt.day
-        df["mes_"] = df["fecha"].dt.month_name(locale="es_ES").str[:3]
+        df["mes_"] = df["fecha"].dt.month_name(locale="es_ES.UTF-8").str[:3]
         locale.setlocale(locale.LC_ALL, "")
         df["var_tasas"] = df["venta_ask2"].diff(
             periods=-1
