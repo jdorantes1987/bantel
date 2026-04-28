@@ -9,8 +9,8 @@ p_data_revision_contabilidad = (
 )
 p_data_edo_cta_banesco = "C:/Users/jdorantes/Documents/Analisis/Estados de Cuenta/Banesco/2025/01. ENE/Banesco Enero 2025.xlsx"
 p_data_insert_fact_y_recibos = (
-    "X:/DESARROLLO_DataProfit/Planes Facturacion Clientes Izquierda.xlsx",
-    "//10.100.104.1/AdministracionFinanzas/DESARROLLO_DataProfit/Planes Facturacion Clientes Derecha.xlsx",
+    "/home/Planes Facturacion Clientes Izquierda.xlsx",
+    "/home/Planes Facturacion Clientes Derecha.xlsx",
 )
 p_data_iva_forma99030 = "C:/Users/jdorantes/Documents/Analisis/FORMAS 99030.xlsx"
 
