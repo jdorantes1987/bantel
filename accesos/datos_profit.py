@@ -150,22 +150,32 @@ class datos_profit:
             {where}
             """
         df_notas = get_read_sql(sql, **self.dict_con_admin)
+
+        def _extract_xml_text(value, path):
+            if value is None:
+                return None
+            if isinstance(value, str):
+                value = value.strip()
+                if value == "":
+                    return None
+            elif not isinstance(value, (bytes, bytearray)):
+                return None
+
+            try:
+                root = xml_tree.fromstring(value)
+                text = root.findtext(path)
+                return str(text) if text is not None else None
+            except (xml_tree.ParseError, TypeError, ValueError):
+                return None
+
         #  Desempaqueta la cuenta contable del texto xml en las notas de credito
         df_notas["dis_cen"] = df_notas["dis_cen"].apply(
-            lambda x: (
-                str(xml_tree.fromstring(x).findtext("Carpeta01/CuentaContable"))
-                if x is not None
-                else None
-            )
+            lambda x: _extract_xml_text(x, "Carpeta01/CuentaContable")
         )
         art = self.articulos_profit()
         #  Desempaqueta la cuenta contable del texto xml en los articulos
         art["dis_cen"] = art["dis_cen"].apply(
-            lambda x: (
-                str(xml_tree.fromstring(x).findtext("Carpeta03/CuentaContable"))
-                if x is not None
-                else None
-            )
+            lambda x: _extract_xml_text(x, "Carpeta03/CuentaContable")
         )
         art2 = art[["co_art", "dis_cen", "campo1"]]
         #  El método drop_duplicates elimina las filas duplicadas en el dataframe de la derecha basándose en la columna dis_cen
@@ -303,8 +313,7 @@ class datos_profit:
         where_all = f"WHERE fp.forma_pag IS NOT NULL AND RTrim(d.co_tipo_doc) In ('FACT','N/CR') AND YEAR(d.fec_reg)={anio}"
         where_mes = f"WHERE fp.forma_pag IS NOT NULL AND RTrim(d.co_tipo_doc) In ('FACT','N/CR') AND YEAR(d.fec_reg)={anio} AND MONTH(d.fec_reg)={mes}"
         where = where_all if mes == "all" else where_mes
-        sql = (
-            """
+        sql = """
                 SELECT RTRIM(d.nro_doc) AS nro_doc, RTRIM(d.co_cli) AS co_cli, cl.cli_des, d.fec_reg as f_reg_doc,
                     cb.fecha AS f_cobro, RTRIM(dcb.cob_num) AS cob_num, fp.forma_pag, RTRIM(fp.cod_cta) as cod_cta, RTRIM(fp.cod_caja) as cod_caja,
                     (d.total_bruto-d.monto_desc_glob) as m_base, dcb.mont_cob as mont_cob_dc, d.total_neto AS total_doc,
@@ -313,9 +322,7 @@ class datos_profit:
                     LEFT JOIN saCobroTPReng AS fp ON dcb.cob_num = fp.cob_num)
                     LEFT JOIN saCobro AS cb ON dcb.cob_num = cb.cob_num)
                     INNER JOIN saCliente AS cl ON d.co_cli = cl.co_cli
-            """
-            + where
-        )
+            """ + where
         df = get_read_sql(sql, **self.dict_con_admin)
         df["f_reg_doc"] = to_datetime(
             df["f_reg_doc"]
