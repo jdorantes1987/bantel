@@ -78,6 +78,7 @@ def __doc_select_data(k_tabla, fec_ini, fec_fin):
     ret_islr = get_read_sql(sql2, **dict_con_admin)
     ret_islr["co_tipo_doc"] = ret_islr["co_tipo_doc"].str.strip()  # suprimir espacios
     docs_col = ["base_imponible", "IGTF", "monto_imp", "total_neto"]
+    docs_base_cols = ["co_tipo_doc", *docs_col]
     ret_islr_t = ret_islr.groupby("co_tipo_doc")[docs_col].sum().reset_index()
     doc["co_tipo_doc"] = doc[
         "co_tipo_doc"
@@ -105,9 +106,15 @@ def __doc_select_data(k_tabla, fec_ini, fec_fin):
             * 0.01
         )
         docs.loc["aislr"] = ["ANT. ISLR", total_ant_islr, 0, 0, total_ant_islr]
-    # Verifica si `ret_islr_t` no está vacío ni contiene solo valores NaN
-    if not ret_islr_t.empty and not ret_islr_t.isna().all().all():
-        docs = concat([docs, ret_islr_t], axis=0, ignore_index=True)
+    # Excluye entradas vacías o con columnas completamente NaN antes de concatenar
+    # para evitar FutureWarning de pandas y mantener la estructura de columnas.
+    docs_clean = docs.dropna(how="all").dropna(axis=1, how="all")
+    ret_islr_t_clean = ret_islr_t.dropna(how="all").dropna(axis=1, how="all")
+    if not ret_islr_t_clean.empty:
+        frames_to_concat = [df for df in [docs_clean, ret_islr_t_clean] if not df.empty]
+        docs = concat(frames_to_concat, axis=0, ignore_index=True).reindex(
+            columns=docs_base_cols
+        )
     else:
         print(
             "Advertencia: `ret_islr_t` está vacío o contiene solo valores NaN. Se omite la concatenación."
@@ -600,8 +607,9 @@ def diccionario_facturacion(
         aggfunc="sum",
         sort=True,
     )
-    a_usd = 0 if conv_usd is False else 1
-    anio_mes = round(df_dic.loc[(anio, mes)][a_usd], ndigits=2)
+    campos_monto_facturacion = ["monto_base_item", "monto_base_item$"]
+    campo_select = campos_monto_facturacion[int(conv_usd)]
+    anio_mes = round(df_dic.loc[(anio, mes), campo_select], ndigits=2)
     return anio_mes
 
 
@@ -619,7 +627,7 @@ def diccionario_facturacion_total_por_anio(
         facturacion_x_anio(conv_usd).groupby("anio")[[campo_select]].sum().reset_index()
     )
     df_fact.set_index(["anio"], inplace=True)
-    ventas_anio = round(df_fact.loc[anio][0], ndigits=2)
+    ventas_anio = round(df_fact.loc[anio, campo_select], ndigits=2)
     return ventas_anio
 
 
